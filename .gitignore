@@ -1,0 +1,20 @@
+# Gem packaging
+*.gem
+/pkg/
+
+# Bundler
+/.bundle/
+/vendor/bundle
+
+# Documentation
+/doc/
+/.yardoc/
+
+# Test coverage
+/coverage/
+
+# IDE and editor files
+/.idea/
+*.swp
+*.swo
+*~
