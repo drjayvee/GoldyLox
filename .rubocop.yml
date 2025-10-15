@@ -1,0 +1,16 @@
+AllCops:
+  TargetRubyVersion: 3.4
+  NewCops: disable
+
+# A couple of rules to make this more like Rails omakase
+Style/StringLiterals:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Style/StringLiteralsInInterpolation:
+  Enabled: true
+  EnforcedStyle: double_quotes
+
+Layout/LineLength:
+  Max: 120
+
