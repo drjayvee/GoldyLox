@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module GoldyLox
+  # Token
+  # see https://craftinginterpreters.com/scanning.html#lexemes-and-tokens
   class Token
     TYPES = %i[
       left_paren right_paren left_brace right_brace

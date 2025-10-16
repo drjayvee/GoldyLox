@@ -1,0 +1,14 @@
+module GoldyLox
+  class Token
+    TYPES: Array[Symbol]
+
+    attr_reader type: Symbol
+    attr_reader line: Integer
+    attr_reader lexeme: String
+    attr_reader literal: nil | Numeric | String
+
+    def initialize: (Symbol, Integer, String, ?nil | Numeric | String) -> void
+
+    def to_s: () -> String
+  end
+end
