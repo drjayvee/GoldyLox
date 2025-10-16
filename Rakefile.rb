@@ -19,3 +19,10 @@ Rake::TestTask.new(:test_no_rbs) do |t|
 
   t.description = "Run tests (without RBS)"
 end
+
+task :rbs_validate do
+  sh "rbs -I sig validate"
+end
+
+desc "Run all checks (RBS validation + tests with RBS)"
+task ci: %i[rbs_validate test]
