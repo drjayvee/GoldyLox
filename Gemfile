@@ -5,6 +5,7 @@ source "https://rubygems.org"
 gem "rbs"
 
 group :development do
+  gem "rake"
   gem "rubocop"
 end
 
