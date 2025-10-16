@@ -15,17 +15,6 @@ class TokenTest < Minitest::Test
     end
   end
 
-  def test_string_literal
-    token = GoldyLox::Token.new :string, 1234, "\"quite 'leet'\"", "quite 'leet'"
-
-    assert_equal :string, token.type
-    assert_equal 1234, token.line
-    assert_equal "\"quite 'leet'\"", token.lexeme
-    assert_equal "quite 'leet'", token.literal
-
-    assert_equal "string \"quite 'leet'\" quite 'leet'", token.to_s
-  end
-
   def test_identifier
     token = GoldyLox::Token.new :identifier, 1, "foo"
 
@@ -35,6 +24,17 @@ class TokenTest < Minitest::Test
     assert_nil token.literal
 
     assert_equal "identifier foo", token.to_s
+  end
+
+  def test_string_literal
+    token = GoldyLox::Token.new :string, 1234, "\"quite 'leet'\"", "quite 'leet'"
+
+    assert_equal :string, token.type
+    assert_equal 1234, token.line
+    assert_equal "\"quite 'leet'\"", token.lexeme
+    assert_equal "quite 'leet'", token.literal
+
+    assert_equal "string \"quite 'leet'\" quite 'leet'", token.to_s
   end
 
   def test_number_literal
