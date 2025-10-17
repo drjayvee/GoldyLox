@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+module GoldyLox
+  class Scanner
+    @source: String
+    @start: Integer
+    @current: Integer
+    @line: Integer
+    @tokens: Array[Token]
+
+    def initialize: (String) -> void
+
+    def scan_tokens: () -> Array[Token]
+
+    def scan_token: () -> void
+
+    def advance: () -> void
+
+    def add_token: (Symbol, ?(nil | Numeric | String)) -> void
+  end
+end
