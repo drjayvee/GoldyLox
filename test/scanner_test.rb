@@ -13,10 +13,18 @@ class ScannerTest < Minitest::Test
 
   def test_invalid_character
     scanner = GoldyLox::Scanner.new "#"
+    scanner.scan_tokens
 
-    assert_raises GoldyLox::Scanner::Error, "Unexpected character" do
-      scanner.scan_tokens
-    end
+    assert_predicate scanner.errors, :any?
+    assert_kind_of GoldyLox::Scanner::Error, scanner.errors.first
+    assert_equal "Unexpected character", scanner.errors.first.to_s
+  end
+
+  def test_multiple_errors
+    scanner = GoldyLox::Scanner.new "##"
+    scanner.scan_tokens
+
+    assert_equal 2, scanner.errors.length
   end
 
   def test_braces

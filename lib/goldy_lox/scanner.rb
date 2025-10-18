@@ -13,11 +13,14 @@ module GoldyLox
       end
     end
 
+    attr_reader :errors
+
     def initialize(source)
       @source = source
       @start = @current = 0
       @line = 1
       @tokens = []
+      @errors = []
     end
 
     def scan_tokens
@@ -45,7 +48,7 @@ module GoldyLox
       when "+" then add_token :plus
       when ";" then add_token :semicolon
       when "*" then add_token :star
-      else raise Error.new "Unexpected character", @line
+      else @errors << Error.new("Unexpected character", @line)
       end
     end
 

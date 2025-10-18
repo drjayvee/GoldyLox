@@ -8,6 +8,8 @@ module GoldyLox
       def initialize: (String, Numeric) -> void
     end
 
+    attr_reader errors: Array[Error]
+
     @source: String
     @start: Integer
     @current: Integer
