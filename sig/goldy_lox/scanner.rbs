@@ -2,6 +2,12 @@
 
 module GoldyLox
   class Scanner
+    class Error < StandardError
+      attr_reader line: Numeric
+
+      def initialize: (String, Numeric) -> void
+    end
+
     @source: String
     @start: Integer
     @current: Integer

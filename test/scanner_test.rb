@@ -11,6 +11,14 @@ class ScannerTest < Minitest::Test
     assert_equal "eof ", tokens.last.to_s
   end
 
+  def test_invalid_character
+    scanner = GoldyLox::Scanner.new "#"
+
+    assert_raises GoldyLox::Scanner::Error, "Unexpected character" do
+      scanner.scan_tokens
+    end
+  end
+
   def test_braces
     scanner = GoldyLox::Scanner.new "(())"
     tokens = scanner.scan_tokens
