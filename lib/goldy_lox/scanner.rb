@@ -24,15 +24,19 @@ module GoldyLox
     end
 
     def scan_tokens
-      while @current < @source.length
+      until eof?
         @start = @current
         scan_token
       end
 
-      @tokens.push Token.new(:eof, @line, "")
+      add_token :eof
     end
 
     private
+
+    def eof?
+      @current == @source.length
+    end
 
     def scan_token
       char = advance

@@ -20,6 +20,8 @@ module GoldyLox
 
     def scan_tokens: () -> Array[Token]
 
+    def eof?: () -> bool
+
     def scan_token: () -> void
 
     def advance: () -> void
