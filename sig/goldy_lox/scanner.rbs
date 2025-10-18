@@ -2,13 +2,13 @@
 
 module GoldyLox
   class Scanner
-    class Error < StandardError
+    class LexicalError < StandardError
       attr_reader line: Numeric
 
       def initialize: (String, Numeric) -> void
     end
 
-    attr_reader errors: Array[Error]
+    attr_reader errors: Array[LexicalError]
 
     @source: String
     @start: Integer

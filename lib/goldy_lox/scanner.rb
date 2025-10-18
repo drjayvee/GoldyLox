@@ -4,7 +4,7 @@ module GoldyLox
   # The scanner reads Lox source and transforms it into a Token stream
   class Scanner
     # :nodoc:
-    class Error < StandardError
+    class LexicalError < StandardError
       attr_reader :line
 
       def initialize(message, line)
@@ -48,7 +48,7 @@ module GoldyLox
       when "+" then add_token :plus
       when ";" then add_token :semicolon
       when "*" then add_token :star
-      else @errors << Error.new("Unexpected character", @line)
+      else @errors << LexicalError.new("Unexpected character", @line)
       end
     end
 

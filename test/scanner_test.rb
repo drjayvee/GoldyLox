@@ -16,7 +16,7 @@ class ScannerTest < Minitest::Test
     scanner.scan_tokens
 
     assert_predicate scanner.errors, :any?
-    assert_kind_of GoldyLox::Scanner::Error, scanner.errors.first
+    assert_kind_of GoldyLox::Scanner::LexicalError, scanner.errors.first
     assert_equal "Unexpected character", scanner.errors.first.to_s
   end
 
