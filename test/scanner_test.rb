@@ -93,6 +93,36 @@ class ScannerTest < Minitest::Test
     assert_equal "Unterminated string", scanner.errors.first.to_s
   end
 
+  def test_number_literal
+    tokens = scan_tokens "1337"
+
+    assert_equal 2, tokens.size
+    assert_equal :number, tokens.first.type
+    assert_equal "1337", tokens.first.lexeme
+    assert_equal 1337, tokens.first.literal
+  end
+
+  def test_number_literal_with_digits
+    tokens = scan_tokens "13.37"
+
+    assert_equal 2, tokens.size
+    assert_equal :number, tokens.first.type
+    assert_equal "13.37", tokens.first.lexeme
+    assert_equal 13.37, tokens.first.literal
+  end
+
+  def test_number_with_dot
+    %w[1. 9.].each do |number_literal|
+      scanner = GoldyLox::Scanner.new number_literal
+      tokens = scanner.scan_tokens[..-2] # skip :eof
+
+      assert_empty scanner.errors
+      assert_equal 2, tokens.length
+      assert_equal number_literal.to_f, tokens.first.literal
+      assert_equal :dot, tokens[1].type
+    end
+  end
+
   private
 
   def scan_tokens(source)

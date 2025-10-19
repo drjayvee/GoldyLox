@@ -24,11 +24,15 @@ module GoldyLox
 
     def scan_token: () -> void
 
-    def string: () -> void
+    def string_literal: () -> void
+
+    def number_literal: () -> void
 
     def match: (String) -> bool
 
     def peek: () -> String
+
+    def peek_next: () -> String
 
     def advance: () -> String
 

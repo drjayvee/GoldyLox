@@ -3,6 +3,8 @@
 module GoldyLox
   # The scanner reads Lox source and transforms it into a Token stream
   class Scanner
+    DIGITS_RANGE = "0".."9".freeze
+
     # :nodoc:
     class LexicalError < StandardError
       attr_reader :line
@@ -68,13 +70,14 @@ module GoldyLox
       when " ", "\r", "\t" # ignore whitespace
       when "\n" then @line += 1
 
-      when '"' then string
+      when '"' then string_literal
+      when DIGITS_RANGE then number_literal
 
       else @errors << LexicalError.new("Unexpected character", @line)
       end
     end
 
-    def string
+    def string_literal
       until peek == '"'
         if eof?
           @errors << LexicalError.new("Unterminated string", @line)
@@ -89,6 +92,22 @@ module GoldyLox
       advance # past closing `"`
     end
 
+    def number_literal
+      advance while digit?(peek)
+
+      if peek == "." && digit?(peek_next)
+        advance # consume the "."
+
+        advance while digit?(peek)
+      end
+
+      add_token :number, @source[@start..@current - 1].to_f
+    end
+
+    def digit?(char)
+      DIGITS_RANGE.include?(char)
+    end
+
     def match(expected)
       return false if eof?
       return false if @source[@current] != expected
@@ -98,7 +117,11 @@ module GoldyLox
     end
 
     def peek
-      eof? ? "\0" : @source[@current]
+      @source[@current] || "\0"
+    end
+
+    def peek_next
+      @source[@current + 1] || "\0"
     end
 
     def advance
