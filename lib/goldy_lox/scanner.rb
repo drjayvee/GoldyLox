@@ -58,6 +58,13 @@ module GoldyLox
       when "<" then add_token match("=") ? :less_equal    : :less
       when ">" then add_token match("=") ? :greater_equal : :greater
 
+      when "/"
+        if match "/" # comment
+          advance until peek == "\n" || eof?
+        else
+          add_token :slash
+        end
+
       else @errors << LexicalError.new("Unexpected character", @line)
       end
     end
@@ -68,6 +75,10 @@ module GoldyLox
 
       @current += 1
       true
+    end
+
+    def peek
+      eof? ? "\0" : @source[@current]
     end
 
     def advance

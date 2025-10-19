@@ -26,6 +26,8 @@ module GoldyLox
 
     def match: (String) -> bool
 
+    def peek: () -> String
+
     def advance: () -> String
 
     def add_token: (Symbol, ?(nil | Numeric | String)) -> void

@@ -55,6 +55,14 @@ class ScannerTest < Minitest::Test
     end
   end
 
+  def test_comment
+    assert_equal :eof, scan_tokens("// don't mind @me!").first.type
+  end
+
+  def test_slash
+    assert_equal "slash /", scan_tokens("/").first.to_s
+  end
+
   private
 
   def scan_tokens(source)
