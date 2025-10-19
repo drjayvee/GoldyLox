@@ -24,6 +24,8 @@ module GoldyLox
 
     def scan_token: () -> void
 
+    def string: () -> void
+
     def match: (String) -> bool
 
     def peek: () -> String

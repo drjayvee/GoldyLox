@@ -69,6 +69,23 @@ class ScannerTest < Minitest::Test
     assert_equal %i[left_paren right_paren eof], tokens.map(&:type)
   end
 
+  def test_string_literal
+    tokens = scan_tokens('"hello world"')
+
+    assert_equal 2, tokens.size
+    assert_equal :string, tokens.first.type
+    assert_equal '"hello world"', tokens.first.lexeme
+    assert_equal "hello world", tokens.first.literal
+  end
+
+  def test_unterminated_string_literal
+    scanner = GoldyLox::Scanner.new '"uh oh'
+    scanner.scan_tokens
+
+    refute_empty scanner.errors
+    assert_equal "Unterminated string", scanner.errors.first.to_s
+  end
+
   private
 
   def scan_tokens(source)

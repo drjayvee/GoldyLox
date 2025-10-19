@@ -68,8 +68,25 @@ module GoldyLox
       when " ", "\r", "\t" # ignore whitespace
       when "\n" then @line += 1
 
+      when '"' then string
+
       else @errors << LexicalError.new("Unexpected character", @line)
       end
+    end
+
+    def string
+      until peek == '"'
+        if eof?
+          @errors << LexicalError.new("Unterminated string", @line)
+          return
+        end
+
+        @line += 1 if peek == "\n"
+        advance
+      end
+
+      add_token :string, @source[@start + 1..@current - 1] # start and current are now at the start and end quotes
+      advance # past closing `"`
     end
 
     def match(expected)
