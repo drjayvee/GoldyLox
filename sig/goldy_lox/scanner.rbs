@@ -2,6 +2,8 @@
 
 module GoldyLox
   class Scanner
+    DIGITS_RANGE: Range[String]
+
     class LexicalError < StandardError
       attr_reader line: Numeric
 

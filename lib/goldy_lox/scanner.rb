@@ -3,7 +3,7 @@
 module GoldyLox
   # The scanner reads Lox source and transforms it into a Token stream
   class Scanner
-    DIGITS_RANGE = "0".."9".freeze
+    DIGITS_RANGE = "0".."9"
 
     # :nodoc:
     class LexicalError < StandardError
