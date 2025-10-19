@@ -4,8 +4,7 @@ require_relative "test_helper"
 
 class ScannerTest < Minitest::Test
   def test_empty_source
-    scanner = GoldyLox::Scanner.new ""
-    tokens = scanner.scan_tokens
+    tokens = scan_tokens ""
 
     assert_equal 1, tokens.size
     assert_equal "eof ", tokens.last.to_s
@@ -35,5 +34,30 @@ class ScannerTest < Minitest::Test
       %i[left_paren left_paren right_paren right_paren],
       tokens[..-2].map(&:type) # -2 to ignore :eof
     )
+  end
+
+  def test_bang_equal_less_greater_and_equal
+    {
+      "!" => :bang,
+      "=" => :equal,
+      "<" => :less,
+      ">" => :greater,
+    }.each_pair do |lexeme, token_type|
+      assert_equal(
+        token_type,
+        scan_tokens(lexeme).first.type
+      )
+
+      assert_equal(
+        "#{token_type}_equal".to_sym,
+        scan_tokens("#{lexeme}=").first.type
+      )
+    end
+  end
+
+  private
+
+  def scan_tokens(source)
+    GoldyLox::Scanner.new(source).scan_tokens
   end
 end

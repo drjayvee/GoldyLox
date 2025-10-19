@@ -52,8 +52,22 @@ module GoldyLox
       when "+" then add_token :plus
       when ";" then add_token :semicolon
       when "*" then add_token :star
+
+      when "!" then add_token match("=") ? :bang_equal    : :bang
+      when "=" then add_token match("=") ? :equal_equal   : :equal
+      when "<" then add_token match("=") ? :less_equal    : :less
+      when ">" then add_token match("=") ? :greater_equal : :greater
+
       else @errors << LexicalError.new("Unexpected character", @line)
       end
+    end
+
+    def match(expected)
+      return false if eof?
+      return false if @source[@current] != expected
+
+      @current += 1
+      true
     end
 
     def advance

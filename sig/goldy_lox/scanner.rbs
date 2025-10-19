@@ -24,7 +24,9 @@ module GoldyLox
 
     def scan_token: () -> void
 
-    def advance: () -> void
+    def match: (String) -> bool
+
+    def advance: () -> String
 
     def add_token: (Symbol, ?(nil | Numeric | String)) -> void
   end
