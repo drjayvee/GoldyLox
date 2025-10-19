@@ -63,6 +63,12 @@ class ScannerTest < Minitest::Test
     assert_equal "slash /", scan_tokens("/").first.to_s
   end
 
+  def test_whitespace
+    tokens = scan_tokens " (\n\t) "
+
+    assert_equal %i[left_paren right_paren eof], tokens.map(&:type)
+  end
+
   private
 
   def scan_tokens(source)

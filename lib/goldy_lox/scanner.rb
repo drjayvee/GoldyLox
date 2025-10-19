@@ -65,6 +65,9 @@ module GoldyLox
           add_token :slash
         end
 
+      when " ", "\r", "\t" # ignore whitespace
+      when "\n" then @line += 1
+
       else @errors << LexicalError.new("Unexpected character", @line)
       end
     end
