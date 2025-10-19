@@ -78,6 +78,13 @@ class ScannerTest < Minitest::Test
     assert_equal "hello world", tokens.first.literal
   end
 
+  def test_multiline_string_literal
+    tokens = scan_tokens('"hello \nworld"')
+
+    assert_equal 2, tokens.size
+    assert_equal :string, tokens.first.type
+  end
+
   def test_unterminated_string_literal
     scanner = GoldyLox::Scanner.new '"uh oh'
     scanner.scan_tokens
