@@ -3,7 +3,10 @@
 module GoldyLox
   # The scanner reads Lox source and transforms it into a Token stream
   class Scanner
+    ALPHA_REGEX = /[a-zA-Z_]/
     DIGITS_RANGE = "0".."9"
+
+    KEYWORDS = %i[and class else false fun for if nil for print return super this true var while].freeze
 
     # :nodoc:
     class LexicalError < StandardError
@@ -72,6 +75,7 @@ module GoldyLox
 
       when '"' then string_literal
       when DIGITS_RANGE then number_literal
+      when ALPHA_REGEX then identifier
 
       else @errors << LexicalError.new("Unexpected character", @line)
       end
@@ -102,6 +106,19 @@ module GoldyLox
       end
 
       add_token :number, @source[@start..@current - 1].to_f
+    end
+
+    def identifier
+      advance while alpha?(peek) || digit?(peek)
+
+      text = @source[@start..@current]
+      token_type = KEYWORDS.include?(text.to_sym) ? text.to_sym : :identifier
+
+      add_token token_type
+    end
+
+    def alpha?(char)
+      ALPHA_REGEX.match? char
     end
 
     def digit?(char)

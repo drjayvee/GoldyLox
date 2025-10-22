@@ -123,6 +123,46 @@ class ScannerTest < Minitest::Test
     end
   end
 
+  def test_keyword
+    %i[print this for fun and return if super].each do |keyword|
+      tokens = scan_tokens keyword.to_s
+
+      assert_equal 2, tokens.size
+      assert_equal keyword, tokens.first.type
+    end
+  end
+
+  def test_identifier
+    %w[if0 superfun for_fun awesome sure_thing _].each do |identifier|
+      tokens = scan_tokens identifier.to_s
+
+      assert_equal 2, tokens.size
+      assert_equal :identifier, tokens.first.type
+      assert_equal identifier, tokens.first.lexeme
+    end
+  end
+
+  def test_complex_script
+    scanner = GoldyLox::Scanner.new %(
+      class Breakfast {
+        cook() {
+          print "Eggs a-fryin'!";
+        }
+
+        serve(who) {
+          print "Enjoy your breakfast, " + who + ".";
+        }
+      }
+
+      var breakfast = Breakfast();
+      print breakfast; // "Breakfast instance".
+    )
+    tokens = scanner.scan_tokens
+
+    assert_empty scanner.errors
+    assert_equal 36, tokens.size
+  end
+
   private
 
   def scan_tokens(source)

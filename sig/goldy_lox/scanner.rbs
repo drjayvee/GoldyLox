@@ -2,7 +2,10 @@
 
 module GoldyLox
   class Scanner
+    ALPHA_REGEX: Regexp
     DIGITS_RANGE: Range[String]
+
+    KEYWORDS: Array[Symbol]
 
     class LexicalError < StandardError
       attr_reader line: Numeric
@@ -27,15 +30,15 @@ module GoldyLox
     def scan_token: () -> void
 
     def string_literal: () -> void
-
     def number_literal: () -> void
+    def identifier: () -> void
+
+    def alpha?: (String) -> bool
+    def digit?: (String) -> bool
 
     def match: (String) -> bool
-
     def peek: () -> String
-
     def peek_next: () -> String
-
     def advance: () -> String
 
     def add_token: (Symbol, ?(nil | Numeric | String)) -> void
