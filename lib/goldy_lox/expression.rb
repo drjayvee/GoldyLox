@@ -2,6 +2,11 @@
 
 module GoldyLox
   class Expression
+    def accept(visitor)
+      class_name = self.class.name.split("::").last
+      visitor.send "visit_#{class_name.downcase}", self
+    end
+
     # Adds readable attributes for the current class.
     #
     # It's tempting to add a helper to make it even easier to declare classes:

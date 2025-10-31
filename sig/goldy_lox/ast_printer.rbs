@@ -1,0 +1,9 @@
+module GoldyLox
+  class AstPrinter[String]
+    include _ExpressionVisitor[String]
+
+    def print: (Expression) -> String
+
+    def parenthesize: (String, *Expression) -> String
+  end
+end

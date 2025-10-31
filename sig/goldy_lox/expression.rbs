@@ -1,5 +1,7 @@
 module GoldyLox
   class Expression
+    def accept: [R] (_ExpressionVisitor[R]) -> R
+
     def self.attrs: (*Symbol) -> void
 
     class Binary < Expression
