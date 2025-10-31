@@ -9,26 +9,26 @@ module GoldyLox
       attr_reader operator: Token
       attr_reader right: Expression
 
-      def initialize: (Expression, Token, Expression) -> void
+      def initialize: (Expression left, Token operator, Expression right) -> void
     end
 
     class Grouping < Expression
       attr_reader expression: Expression
 
-      def initialize: (Expression) -> void
+      def initialize: (Expression expression) -> void
     end
 
     class Literal < Expression
       attr_reader value: Numeric | String
 
-      def initialize: (Numeric | String) -> void
+      def initialize: (Numeric | String value) -> void
     end
 
     class Unary < Expression
       attr_reader operator: Token
       attr_reader right: Expression
 
-      def initialize: (Token, Expression) -> void
+      def initialize: (Token operator, Expression right) -> void
     end
   end
 end
