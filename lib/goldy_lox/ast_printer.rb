@@ -12,6 +12,8 @@ module GoldyLox
     end
 
     def visit_literal(expr)
+      return "nil" if expr.value.nil?
+
       expr.value.to_s
     end
 

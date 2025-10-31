@@ -19,9 +19,9 @@ module GoldyLox
     end
 
     class Literal < Expression
-      attr_reader value: Numeric | String
+      attr_reader value: Numeric | String | bool | nil
 
-      def initialize: (Numeric | String value) -> void
+      def initialize: (Numeric | String | bool | nil value) -> void
     end
 
     class Unary < Expression

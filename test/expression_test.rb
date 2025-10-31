@@ -34,7 +34,7 @@ class ExpressionTest < Minitest::Test
     skip "RBS runtime type checking not enabled" unless defined? RBS::Test
 
     assert_raises RBS::Test::Tester::TypeError do
-      GoldyLox::Expression::Literal.new true
+      GoldyLox::Expression::Literal.new []
     end
   end
 end

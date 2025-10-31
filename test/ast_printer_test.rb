@@ -18,9 +18,11 @@ class AstPrinterTest < Minitest::Test
   end
 
   def test_literal
-    literal = GoldyLox::Expression::Literal.new "hi"
+    { "hi" => "hi", true => "true", false => "false", nil => "nil" }.each do |value, string|
+      literal = GoldyLox::Expression::Literal.new value
 
-    assert_equal "hi", @printer.print(literal)
+      assert_equal string, @printer.print(literal)
+    end
   end
 
   def test_grouping
