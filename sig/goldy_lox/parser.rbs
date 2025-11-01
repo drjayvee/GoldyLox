@@ -1,0 +1,33 @@
+module GoldyLox
+  class Parser
+    class ParseError < StandardError
+      attr_reader token: Token
+
+      def initialize: (String, Token) -> void
+    end
+
+    @tokens: Array[Token]
+    @current: Integer
+
+    def initialize: (Array[Token]) -> void
+    def parse: () -> Expression
+
+    def expression: () -> Expression
+    def equality: () -> Expression
+    def comparison: () -> Expression
+    def term: () -> Expression
+    def factor: () -> Expression
+    def unary: () -> Expression
+    def primary: () -> Expression
+
+    def end?: () -> bool
+    def match?: (*Symbol) -> bool
+    def consume: (Symbol, String) -> void
+    def advance: () -> Token
+    def check?: (Symbol) -> bool
+    def peek: () -> Token
+    def previous: () -> Token
+
+    def error: (Token, String) -> ParseError
+  end
+end

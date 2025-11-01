@@ -7,7 +7,7 @@ module GoldyLox
     attr_reader lexeme: String
     attr_reader literal: nil | Numeric | String
 
-    def initialize: (Symbol, Integer, String, ?nil | Numeric | String) -> void
+    def initialize: (Symbol type, Integer line, String lexeme, ?nil | Numeric | String literal) -> void
 
     def to_s: () -> String
   end
