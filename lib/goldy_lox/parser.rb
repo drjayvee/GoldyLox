@@ -12,14 +12,20 @@ module GoldyLox
       end
     end
 
+    attr_reader :errors
+
     def initialize(tokens)
       @tokens = tokens
       @current = 0
+      @errors = []
     end
 
-    # NOTE: this method is not at all final, but it does provide a hook for testing for the time being
     def parse
+      @errors = []
+
       expression
+    rescue ParseError
+      nil
     end
 
     private
@@ -110,8 +116,10 @@ module GoldyLox
       if match? :left_paren
         expr = expression
         consume(:right_paren, "Expect ')' after expression")
-        Expression::Grouping.new expr
+        return Expression::Grouping.new expr
       end
+
+      raise error(peek, "Expect expression")
     end
 
     # Token stream utilities
@@ -121,7 +129,7 @@ module GoldyLox
     end
 
     def match?(*token_types)
-      token_types.each do|token_type|
+      token_types.each do |token_type|
         if check? token_type
           advance
           return true
@@ -134,7 +142,7 @@ module GoldyLox
     def consume(token_type, message)
       return advance if check? token_type
 
-      error peek, message
+      error(peek, message)
     end
 
     def advance
@@ -158,8 +166,22 @@ module GoldyLox
     end
 
     def error(token, message)
-      # TODO: GoldyLox.error(token, message)
-      ParseError.new message, token
+      ParseError.new(message, token).tap { @errors << it }
+    end
+
+    def synchronize
+      advance
+
+      until end?
+        return if previous.type == :semicolon
+
+        case peek.type
+        when :class, :fun, :var, :for, :if, :while, :print, :return
+          return
+        else
+          advance
+        end
+      end
     end
   end
 end

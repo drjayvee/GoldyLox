@@ -8,13 +8,20 @@ class ParserTest < Minitest::Test
   end
 
   # @param tokens Array[GoldyLox::Token]
-  # @return GoldyLox::Expression
-  def parse(tokens)
+  # @return GoldyLox::Parser
+  def parser(tokens)
+    tokens << [:eof, tokens.last[1], ""]
     tokens = tokens.map do |token_args|
       GoldyLox::Token.new(*token_args)
     end
 
-    GoldyLox::Parser.new(tokens).parse
+    GoldyLox::Parser.new(tokens)
+  end
+
+  # @param tokens Array[GoldyLox::Token]
+  # @return GoldyLox::Expression
+  def parse(tokens)
+    parser(tokens).parse
   end
 
   def test_primary
@@ -115,5 +122,34 @@ class ParserTest < Minitest::Test
     ]
 
     assert_equal "(* (group (+ 1 2)) 3)", @printer.print(expr)
+  end
+
+  def test_store_unsynchronizable_parse_error
+    parser = self.parser [
+      [:minus, 1, "-"]
+    ]
+
+    expression = parser.parse
+
+    assert_nil expression
+
+    refute_empty parser.errors
+    assert_equal "Expect expression", parser.errors.first.message
+    assert_equal :eof, parser.errors.first.token.type
+  end
+
+  def test_store_synchronizable_parse_error
+    # (1
+    parser = self.parser [
+      [:left_paren, 1, "("],
+      [:number, 2, "1", 1]
+    ]
+    expression = parser.parse
+
+    refute_nil expression
+
+    refute_empty parser.errors
+    assert_equal "Expect ')' after expression", parser.errors.first.message
+    assert_equal :eof, parser.errors.first.token.type
   end
 end
