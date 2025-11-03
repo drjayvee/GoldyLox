@@ -1,0 +1,11 @@
+module GoldyLox
+  class Interpreter
+    include _ExpressionVisitor[untyped]
+
+    @expression: Expression
+
+    def initialize: (Expression) -> void
+
+    def interpret: () -> untyped
+  end
+end
