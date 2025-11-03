@@ -75,4 +75,22 @@ class InterpreterTest < Minitest::Test
       assert_raises(GoldyLox::Interpreter::InvalidOperandError) { interpret expr }
     end
   end
+
+  def test_binary_star
+    assert_equal 10, interpret("5 * 2")
+    assert_equal 4.08, interpret("1.2 * 3.4")
+
+    assert_raises GoldyLox::Interpreter::InvalidOperandError do
+      interpret "5 * true"
+    end
+  end
+
+  def test_binary_slash
+    assert_equal 2, interpret("8 / 4")
+    assert_equal 1.8, interpret("9 / 5")
+
+    assert_raises GoldyLox::Interpreter::InvalidOperandError do
+      interpret "5 / true"
+    end
+  end
 end

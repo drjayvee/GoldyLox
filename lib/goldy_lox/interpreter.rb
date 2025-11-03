@@ -31,8 +31,12 @@ module GoldyLox
       when :plus
         assert_numeric_operands(expr.operator, left, right)
         left + right
-      when :star then left * right
-      when :slash then left / right
+      when :star
+        assert_numeric_operands(expr.operator, left, right)
+        left * right
+      when :slash
+        assert_numeric_operands(expr.operator, left, right)
+        left / right
       when :equal_equal then left == right
       when :bang_equal then left != right
       when :greater then left > right
