@@ -1,5 +1,12 @@
 module GoldyLox
   class Interpreter
+    class InvalidOperandError < RuntimeError
+      attr_reader operator: Token
+      attr_reader value: untyped
+
+      def initialize: (Token operator, untyped value) -> void
+    end
+
     include _ExpressionVisitor[untyped]
 
     @expression: Expression
@@ -7,5 +14,7 @@ module GoldyLox
     def initialize: (Expression) -> void
 
     def interpret: () -> untyped
+
+    def assert_numeric_operands: (Token operator, *untyped operands) -> void
   end
 end

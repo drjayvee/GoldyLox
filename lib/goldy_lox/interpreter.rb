@@ -2,6 +2,16 @@
 
 module GoldyLox
   class Interpreter
+    class InvalidOperandError < RuntimeError # :nodoc:
+      attr_reader :operator, :value
+
+      def initialize(operation, value)
+        @operator = operation
+        @value = value
+        super("Invalid operand for #{@operator}: #{value.inspect}")
+      end
+    end
+
     def initialize(expression)
       @expression = expression
     end
@@ -15,8 +25,12 @@ module GoldyLox
       right = expr.right.accept self
 
       case expr.operator.type
-      when :minus then left - right
-      when :plus then left + right
+      when :minus
+        assert_numeric_operands(expr.operator, left, right)
+        left - right
+      when :plus
+        assert_numeric_operands(expr.operator, left, right)
+        left + right
       when :star then left * right
       when :slash then left / right
       when :equal_equal then left == right
@@ -25,7 +39,8 @@ module GoldyLox
       when :greater_equal then left >= right
       when :less then left < right
       when :less_equal then left <= right
-      else raise RuntimeError "Invalid operator"
+      else
+        raise RuntimeError "Invalid operator"
       end
     end
 
@@ -41,9 +56,18 @@ module GoldyLox
       value = expr.right.accept(self)
 
       case expr.operator.type
-      when :minus then -value
-      when :bang then !value
-      else raise RuntimeError "Invalid operator"
+      when :minus
+        assert_numeric_operands(expr.operator, value)
+        -value
+      when :bang then !value # "Lox follows Ruby’s simple rule: false and nil are falsey, and everything else is truthy"
+      else
+        raise RuntimeError "Invalid operator"
+      end
+    end
+
+    def assert_numeric_operands(operator, *operands)
+      operands.each do |operand|
+        raise InvalidOperandError.new(operator, operand) unless operand.is_a?(Numeric)
       end
     end
   end

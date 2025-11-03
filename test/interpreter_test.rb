@@ -23,12 +23,26 @@ class InterpreterTest < Minitest::Test
     end
   end
 
-  def test_unary
+  def test_unary_minus
     assert_equal(-5, interpret("-5"))
     assert_equal 5, interpret("--5")
 
-    assert_equal true, interpret("!false")
-    assert_equal false, interpret("!true")
+    %w[true false nil \"hello\"].each do |operand|
+      assert_raises GoldyLox::Interpreter::InvalidOperandError do
+        interpret "-#{operand}"
+      end
+    end
+  end
+
+  def test_unary_bang
+    %w[false nil].each do |operand|
+      assert_equal true, interpret("!#{operand}")
+    end
+
+    %w[true 0 1 \"0\" \"1\"].each do |operand|
+      assert_equal false, interpret("!#{operand}")
+    end
+
     assert_equal false, interpret("!!false")
     assert_equal true, interpret("!!true")
   end
@@ -40,9 +54,25 @@ class InterpreterTest < Minitest::Test
     assert_nil interpret("((nil))")
   end
 
-  def test_minus
+  def test_binary_minus
     assert_equal 5, interpret("7 - 2")
+    assert_equal 5, interpret("5 - 0")
     assert_equal(-5, interpret("2 - 7"))
-    assert_equal(9, interpret("2 - -7"))
+    assert_equal(5, interpret("2 - -3"))
+
+    ["true - 1", "1 - true", "1 - false", "1 - nil", "1 - \"1\""].each do |expr|
+      assert_raises(GoldyLox::Interpreter::InvalidOperandError) { interpret expr }
+    end
+  end
+
+  def test_binary_plus
+    assert_equal 5, interpret("3 + 2")
+    assert_equal 5, interpret("5 + 0")
+    assert_equal(-5, interpret("-2 + -3"))
+    assert_equal(5, interpret("7 + -2"))
+
+    ["true + 1", "1 + true", "1 + false", "1 + nil", "1 + \"1\""].each do |expr|
+      assert_raises(GoldyLox::Interpreter::InvalidOperandError) { interpret expr }
+    end
   end
 end
