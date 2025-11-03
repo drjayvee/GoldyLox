@@ -76,6 +76,8 @@ class ScannerTest < Minitest::Test
     assert_equal :string, tokens.first.type
     assert_equal '"hello world"', tokens.first.lexeme
     assert_equal "hello world", tokens.first.literal
+
+    assert_equal "yo", scan_tokens(" \"yo\" ").first.literal
   end
 
   def test_multiline_string_literal
@@ -100,6 +102,8 @@ class ScannerTest < Minitest::Test
     assert_equal :number, tokens.first.type
     assert_equal "1337", tokens.first.lexeme
     assert_equal 1337, tokens.first.literal
+
+    assert_equal 1337, scan_tokens("\t1337 ").first.literal
   end
 
   def test_number_literal_with_digits
@@ -124,21 +128,26 @@ class ScannerTest < Minitest::Test
   end
 
   def test_keyword
-    %i[print this for fun and return if super].each do |keyword|
-      tokens = scan_tokens keyword.to_s
+    %i[print this for true fun and return if super].each do |keyword|
+      ["", " ", "  ", "\t"].each do |padding|
+        tokens = scan_tokens(padding + keyword.to_s + padding)
 
-      assert_equal 2, tokens.size
-      assert_equal keyword, tokens.first.type
+        assert_equal 2, tokens.size
+        assert_equal keyword, tokens.first.type
+        assert_equal keyword.to_s, tokens.first.lexeme
+      end
     end
   end
 
   def test_identifier
     %w[if0 superfun for_fun awesome sure_thing _].each do |identifier|
-      tokens = scan_tokens identifier.to_s
+      ["", " ", "  ", "\t"].each do |padding|
+        tokens = scan_tokens(padding + identifier.to_s + padding)
 
-      assert_equal 2, tokens.size
-      assert_equal :identifier, tokens.first.type
-      assert_equal identifier, tokens.first.lexeme
+        assert_equal 2, tokens.size
+        assert_equal :identifier, tokens.first.type
+        assert_equal identifier, tokens.first.lexeme
+      end
     end
   end
 

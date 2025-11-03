@@ -92,8 +92,8 @@ module GoldyLox
         advance
       end
 
-      add_token :string, @source[@start + 1..@current - 1] # start and current are now at the start and end quotes
       advance # past closing `"`
+      add_token :string, @source[@start + 1...@current - 1] # start and current are now at the start and end quotes
     end
 
     def number_literal
@@ -105,13 +105,13 @@ module GoldyLox
         advance while digit?(peek)
       end
 
-      add_token :number, @source[@start..@current - 1].to_f
+      add_token :number, @source[@start...@current].to_f
     end
 
     def identifier
       advance while alpha?(peek) || digit?(peek)
 
-      text = @source[@start..@current]
+      text = @source[@start...@current]
       token_type = KEYWORDS.include?(text.to_sym) ? text.to_sym : :identifier
 
       add_token token_type
@@ -148,7 +148,7 @@ module GoldyLox
     end
 
     def add_token(type, literal = nil)
-      text = @source[@start..@current]
+      text = @source[@start...@current]
       @tokens << Token.new(type, @line, text, literal)
     end
   end
