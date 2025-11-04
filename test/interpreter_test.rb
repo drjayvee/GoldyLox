@@ -71,7 +71,10 @@ class InterpreterTest < Minitest::Test
     assert_equal(-5, interpret("-2 + -3"))
     assert_equal(5, interpret("7 + -2"))
 
-    ["true + 1", "1 + true", "1 + false", "1 + nil", "1 + \"1\""].each do |expr|
+    assert_equal "hi", interpret("\"h\" + \"i\"")
+    assert_equal "hi", interpret("\"\" + \"hi\"")
+
+    ["true + 1", "1 + true", "1 + false", "1 + nil", "1 + \"1\"", "\"1\" + 1"].each do |expr|
       assert_raises(GoldyLox::Interpreter::InvalidOperandError) { interpret expr }
     end
   end

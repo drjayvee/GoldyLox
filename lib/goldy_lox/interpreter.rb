@@ -23,19 +23,26 @@ module GoldyLox
     def visit_binary(expr)
       left = expr.left.accept self
       right = expr.right.accept self
+      operator = expr.operator
 
-      case expr.operator.type
+      case operator.type
       when :minus
-        assert_numeric_operands(expr.operator, left, right)
+        assert_numeric_operands(operator, left, right)
         left - right
       when :plus
-        assert_numeric_operands(expr.operator, left, right)
+        # left operand's type is leading
+        case left
+        when String then raise InvalidOperandError.new(operator, right) unless right.is_a? String
+        when Numeric then assert_numeric_operands(operator, right)
+        else raise InvalidOperandError.new(operator, left)
+        end
+
         left + right
       when :star
-        assert_numeric_operands(expr.operator, left, right)
+        assert_numeric_operands(operator, left, right)
         left * right
       when :slash
-        assert_numeric_operands(expr.operator, left, right)
+        assert_numeric_operands(operator, left, right)
         left / right
       when :equal_equal then left == right
       when :bang_equal then left != right
