@@ -11,6 +11,7 @@ Rake::TestTask.new(:test) do |t|
 
   t.ruby_opts << "-r rbs/test/setup"
   ENV["RBS_TEST_TARGET"] = "GoldyLox::*"
+  ENV["RBS_TEST_LOGLEVEL"] = "warn"
 end
 
 Rake::TestTask.new(:test_no_rbs) do |t|
