@@ -1,0 +1,16 @@
+module GoldyLox
+  interface _Appendable
+    def <<: (untyped) -> untyped
+  end
+
+  class Runner
+    @out: _Appendable
+
+    def initialize: (?_Appendable) -> void
+
+    def run: (String) -> void
+
+    def log_error: (String, Integer) -> void
+    def log_result: (_ToS) -> void
+  end
+end

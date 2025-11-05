@@ -1,0 +1,44 @@
+# frozen_string_literal: true
+
+module GoldyLox
+  class Runner
+    def initialize(out = $stdout)
+      @out = out
+    end
+
+    def run(lox)
+      tokens = (scanner = GoldyLox::Scanner.new(lox)).scan_tokens
+      if scanner.errors.any?
+        scanner.errors.each { log_error it.message, it.line }
+        return
+      end
+
+      expr = (parser = GoldyLox::Parser.new(tokens)).parse
+      if parser.errors.any?
+        parser.errors.each { log_error it.message, it.token.line }
+        return
+      end
+
+      # at this point, expr is never nil
+
+      begin
+        value = GoldyLox::Interpreter.new(expr).interpret
+      rescue Interpreter::InvalidOperandError => e
+        log_error e.message, e.operator.line
+        return
+      end
+
+      log_result value
+    end
+
+    private
+
+    def log_error(message, line)
+      @out << "! #{message} (:#{line})\n"
+    end
+
+    def log_result(result)
+      @out << "=> #{result}\n"
+    end
+  end
+end

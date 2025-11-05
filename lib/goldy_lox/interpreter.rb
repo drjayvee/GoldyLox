@@ -5,10 +5,10 @@ module GoldyLox
     class InvalidOperandError < RuntimeError # :nodoc:
       attr_reader :operator, :value
 
-      def initialize(operation, value)
-        @operator = operation
+      def initialize(operator, value)
+        @operator = operator
         @value = value
-        super("Invalid operand for #{@operator}: #{value.inspect}")
+        super("Invalid operand for #{operator.type}: #{value.inspect}")
       end
     end
 
