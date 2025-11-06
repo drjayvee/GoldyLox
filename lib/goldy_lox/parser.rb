@@ -17,15 +17,10 @@ module GoldyLox
     def initialize(tokens)
       @tokens = tokens
       @current = 0
-      @errors = []
     end
 
     def parse
-      @errors = []
-
-      expression
-    rescue ParseError
-      nil
+      [expression]
     end
 
     private
@@ -119,7 +114,7 @@ module GoldyLox
         return Expression::Grouping.new expr
       end
 
-      raise error(peek, "Expect expression")
+      error(peek, "Expect expression")
     end
 
     # Token stream utilities
@@ -166,7 +161,7 @@ module GoldyLox
     end
 
     def error(token, message)
-      ParseError.new(message, token).tap { @errors << it }
+      raise ParseError.new(message, token)
     end
 
     def synchronize

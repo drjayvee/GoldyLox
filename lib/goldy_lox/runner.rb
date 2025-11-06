@@ -13,13 +13,12 @@ module GoldyLox
         return
       end
 
-      expr = (parser = GoldyLox::Parser.new(tokens)).parse
-      if parser.errors.any?
-        parser.errors.each { log_error it.message, it.token.line }
+      begin
+        expr = GoldyLox::Parser.new(tokens).parse.first
+      rescue Parser::ParseError => e
+        log_error e.message, e.token.line
         return
       end
-
-      # at this point, expr is never nil
 
       begin
         value = GoldyLox::Interpreter.new(expr).interpret

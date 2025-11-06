@@ -9,7 +9,7 @@ class InterpreterTest < Minitest::Test
     if expr.is_a? String
       expr = (parser = GoldyLox::Parser.new(
         GoldyLox::Scanner.new(expr).scan_tokens
-      )).parse
+      )).parse.first
 
       raise "Parse error(s): #{parser.errors.join(". ")}" if expr.nil?
     end

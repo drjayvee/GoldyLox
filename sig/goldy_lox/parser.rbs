@@ -6,12 +6,13 @@ module GoldyLox
       def initialize: (String, Token) -> void
     end
 
-    attr_reader errors: Array[ParseError]
     @tokens: Array[Token]
     @current: Integer
 
     def initialize: (Array[Token]) -> void
-    def parse: () -> (Expression | nil)
+
+    # @raise ParseError
+    def parse: () -> Array[Expression]
 
     def expression: () -> Expression
     def equality: () -> Expression
@@ -29,7 +30,7 @@ module GoldyLox
     def peek: () -> Token
     def previous: () -> Token
 
-    def error: (Token, String) -> ParseError
+    def error: (Token, String) -> void
     def synchronize: () -> void
   end
 end

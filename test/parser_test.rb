@@ -21,7 +21,7 @@ class ParserTest < Minitest::Test
   # @param tokens Array[GoldyLox::Token]
   # @return GoldyLox::Expression
   def parse(tokens)
-    parser(tokens).parse
+    parser(tokens).parse.first
   end
 
   def test_primary
@@ -129,13 +129,9 @@ class ParserTest < Minitest::Test
       [:minus, 1, "-"]
     ]
 
-    expression = parser.parse
-
-    assert_nil expression
-
-    refute_empty parser.errors
-    assert_equal "Expect expression", parser.errors.first.message
-    assert_equal :eof, parser.errors.first.token.type
+    assert_raises GoldyLox::Parser::ParseError, "Expect expression" do
+      parser.parse
+    end
   end
 
   def test_store_synchronizable_parse_error
@@ -144,12 +140,9 @@ class ParserTest < Minitest::Test
       [:left_paren, 1, "("],
       [:number, 2, "1", 1]
     ]
-    expression = parser.parse
 
-    refute_nil expression
-
-    refute_empty parser.errors
-    assert_equal "Expect ')' after expression", parser.errors.first.message
-    assert_equal :eof, parser.errors.first.token.type
+    assert_raises GoldyLox::Parser::ParseError, "Expect ')' after expression" do
+      parser.parse
+    end
   end
 end
