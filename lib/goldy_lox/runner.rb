@@ -14,30 +14,23 @@ module GoldyLox
       end
 
       begin
-        expr = GoldyLox::Parser.new(tokens).parse.first.expression
+        statements = GoldyLox::Parser.new(tokens).parse
       rescue Parser::ParseError => e
         log_error e.message, e.token.line
         return
       end
 
       begin
-        value = GoldyLox::Interpreter.new(expr).interpret
+        GoldyLox::Interpreter.new(@out).interpret statements
       rescue Interpreter::InvalidOperandError => e
         log_error e.message, e.operator.line
-        return
       end
-
-      log_result value
     end
 
     private
 
     def log_error(message, line)
       @out << "! #{message} (:#{line})\n"
-    end
-
-    def log_result(result)
-      @out << "=> #{result}\n"
     end
   end
 end

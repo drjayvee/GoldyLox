@@ -1,8 +1,4 @@
 module GoldyLox
-  interface _Appendable
-    def <<: (untyped) -> untyped
-  end
-
   class Runner
     @out: _Appendable
 

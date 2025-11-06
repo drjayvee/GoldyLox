@@ -1,8 +1,9 @@
 module GoldyLox
   class AstPrinter[String]
     include _ExpressionVisitor[String]
+    include _StatementVisitor[String]
 
-    def print: (Expression) -> String
+    def print: (Statement | Expression) -> String
 
     def parenthesize: (String, *Expression) -> String
   end

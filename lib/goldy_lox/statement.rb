@@ -2,6 +2,11 @@
 
 module GoldyLox
   class Statement
+    def accept(visitor)
+      class_name = self.class.name.split("::").last
+      visitor.send "visit_#{class_name.downcase}", self
+    end
+
     # Copied from Expression.attrs because of
     # https://youtrack.jetbrains.com/issue/RUBY-34849
     def self.attrs(*attrs)

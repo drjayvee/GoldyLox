@@ -1,5 +1,7 @@
 module GoldyLox
   class Statement
+    def accept: [R] (_StatementVisitor[R]) -> R
+
     def self.attrs: (*Symbol) -> void
 
     class Expression < Statement

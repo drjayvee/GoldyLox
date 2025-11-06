@@ -7,6 +7,14 @@ module GoldyLox
       expr.accept(self)
     end
 
+    def visit_expression(stmt)
+      parenthesize "expr", stmt.expression
+    end
+
+    def visit_print(stmt)
+      parenthesize "print", stmt.expression
+    end
+
     def visit_binary(expr)
       parenthesize expr.operator.lexeme, expr.left, expr.right
     end

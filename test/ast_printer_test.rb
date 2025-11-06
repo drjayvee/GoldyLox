@@ -41,4 +41,20 @@ class AstPrinterTest < Minitest::Test
 
     assert_equal "(+ )", @printer.print(unary)
   end
+
+  def test_statement_expression
+    statement = GoldyLox::Statement::Expression.new(
+      GoldyLox::Expression::Literal.new(123)
+    )
+
+    assert_equal "(expr 123)", @printer.print(statement)
+  end
+
+  def test_print_expression
+    statement = GoldyLox::Statement::Print.new(
+      GoldyLox::Expression::Literal.new(123)
+    )
+
+    assert_equal "(print 123)", @printer.print(statement)
+  end
 end

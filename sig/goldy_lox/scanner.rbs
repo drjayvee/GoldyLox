@@ -8,9 +8,9 @@ module GoldyLox
     KEYWORDS: Array[Symbol]
 
     class LexicalError < StandardError
-      attr_reader line: Numeric
+      attr_reader line: Integer
 
-      def initialize: (String, Numeric) -> void
+      def initialize: (String, Integer) -> void
     end
 
     attr_reader errors: Array[LexicalError]

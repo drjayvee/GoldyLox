@@ -27,8 +27,8 @@ class RunnerTest < Minitest::Test
   end
 
   def test_happy_path
-    @runner.run "(2 + 3) * 5;"
+    @runner.run "print (2 + 3) * 5;"
 
-    assert_equal ["=> 25.0\n"], @out
+    assert_equal ["25.0\n"], @out
   end
 end

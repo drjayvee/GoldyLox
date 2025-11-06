@@ -7,13 +7,16 @@ module GoldyLox
       def initialize: (Token operator, untyped value) -> void
     end
 
-    include _ExpressionVisitor[untyped]
+    include _ExpressionVisitor[void]
+    include _StatementVisitor[void]
 
-    @expression: Expression
+    @out: _Appendable
 
-    def initialize: (Expression) -> void
+    def initialize: (_Appendable) -> void
 
-    def interpret: () -> untyped
+    def interpret: (Array[Statement]) -> void
+    def execute: (Statement) -> void
+    def evaluate: (Expression) -> untyped
 
     def assert_numeric_operands: (Token operator, *untyped operands) -> void
   end

@@ -1,0 +1,6 @@
+module GoldyLox
+  interface _StatementVisitor[R]
+    def visit_expression: (Statement::Expression) -> R
+    def visit_print: (Statement::Print) -> R
+  end
+end

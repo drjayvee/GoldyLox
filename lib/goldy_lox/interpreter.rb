@@ -12,12 +12,28 @@ module GoldyLox
       end
     end
 
-    def initialize(expression)
-      @expression = expression
+    def initialize(out = $stdout)
+      @out = out
     end
 
-    def interpret
-      @expression.accept self
+    def interpret(statements)
+      statements.each { execute it }
+    end
+
+    def execute(statement)
+      statement.accept self
+    end
+
+    def evaluate(expr)
+      expr.accept self
+    end
+
+    def visit_expression(stmt)
+      stmt.expression.accept self
+    end
+
+    def visit_print(stmt)
+      @out << "#{stmt.expression.accept(self)}\n"
     end
 
     def visit_binary(expr)

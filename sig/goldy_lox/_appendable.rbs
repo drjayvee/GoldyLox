@@ -1,0 +1,5 @@
+module GoldyLox
+  interface _Appendable
+    def <<: (untyped) -> untyped
+  end
+end
