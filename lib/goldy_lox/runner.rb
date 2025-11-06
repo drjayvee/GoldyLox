@@ -14,7 +14,7 @@ module GoldyLox
       end
 
       begin
-        expr = GoldyLox::Parser.new(tokens).parse.first
+        expr = GoldyLox::Parser.new(tokens).parse.first.expression
       rescue Parser::ParseError => e
         log_error e.message, e.token.line
         return

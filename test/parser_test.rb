@@ -20,18 +20,20 @@ class ParserTest < Minitest::Test
 
   # @param tokens Array[GoldyLox::Token]
   # @return GoldyLox::Expression
-  def parse(tokens)
-    parser(tokens).parse.first
+  # @raise GoldyLox::Parser::ParseError
+  def parse_expression(tokens)
+    tokens << [:semicolon, tokens.last[1], ";"]
+    parser(tokens).parse.first.expression
   end
 
   def test_primary
-    expr = parse [[:number, 1, "1337", 1337]]
+    expr = parse_expression [[:number, 1, "1337", 1337]]
 
     assert_equal "1337", @printer.print(expr)
   end
 
   def test_equality
-    expr = parse [
+    expr = parse_expression [
       [:number, 1, "1337", 1337],
       [:equal_equal, 2, "=="],
       [:string, 3, "\"leet\"", "leet"]
@@ -42,7 +44,7 @@ class ParserTest < Minitest::Test
 
   def test_term_sequence
     # 1 + 2 + 3
-    expr = parse [
+    expr = parse_expression [
       [:number, 1, "1", 1],
       [:plus, 1, "+"],
       [:number, 2, "2", 2],
@@ -55,7 +57,7 @@ class ParserTest < Minitest::Test
 
   def test_factor_precedes_term
     # 1 + 2 * 3
-    expr = parse [
+    expr = parse_expression [
       [:number, 1, "1", 1],
       [:plus, 1, "+"],
       [:number, 2, "2", 2],
@@ -66,7 +68,7 @@ class ParserTest < Minitest::Test
     assert_equal "(+ 1 (* 2 3))", @printer.print(expr)
 
     # 1 * 2 + 3
-    expr = parse [
+    expr = parse_expression [
       [:number, 1, "1", 1],
       [:star, 1, "*"],
       [:number, 2, "2", 2],
@@ -79,7 +81,7 @@ class ParserTest < Minitest::Test
 
   def test_unary_precedes_factor
     # 1 * -2
-    expr = parse [
+    expr = parse_expression [
       [:number, 1, "1", 1],
       [:star, 1, "*"],
       [:minus, 1, "-"],
@@ -91,7 +93,7 @@ class ParserTest < Minitest::Test
 
   def test_recursive_unary
     # !!0
-    expr = parse [
+    expr = parse_expression [
       [:bang, 1, "!"],
       [:bang, 1, "!"],
       [:number, 1, "0", 0]
@@ -100,7 +102,7 @@ class ParserTest < Minitest::Test
     assert_equal "(! (! 0))", @printer.print(expr)
 
     # --1
-    expr = parse [
+    expr = parse_expression [
       [:minus, 1, "-"],
       [:minus, 1, "-"],
       [:number, 1, "0", 1]
@@ -111,7 +113,7 @@ class ParserTest < Minitest::Test
 
   def test_grouping_precedes_factor
     # (1 + 2) * 3
-    expr = parse [
+    expr = parse_expression [
       [:left_paren, 1, "("],
       [:number, 1, "1", 1],
       [:plus, 1, "+"],
@@ -132,6 +134,41 @@ class ParserTest < Minitest::Test
     assert_raises GoldyLox::Parser::ParseError, "Expect expression" do
       parser.parse
     end
+  end
+
+  def test_statement_without_semicolon
+    parser = self.parser [
+      [:number, 1, "1", 1]
+    ]
+
+    assert_raises GoldyLox::Parser::ParseError, "Expect ';' after expression" do
+      parser.parse
+    end
+  end
+
+  def test_expression_statement
+    parser = self.parser [
+      [:number, 1, "1", 1],
+      [:semicolon, 1, ";"]
+    ]
+    statements = parser.parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Expression, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
+  end
+
+  def test_print_statement
+    parser = self.parser [
+      [:print, 1, "print"],
+      [:number, 1, "true", 1],
+      [:semicolon, 1, ";"]
+    ]
+    statements = parser.parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Print, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
   end
 
   def test_store_synchronizable_parse_error

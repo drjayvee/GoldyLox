@@ -20,10 +20,39 @@ module GoldyLox
     end
 
     def parse
-      [expression]
+      statements = []
+      statements << statement until end? || match?(:eof)
+      statements
     end
 
     private
+
+    # Rule
+    #  statement -> expressionStatement
+    #            | printStatement
+    def statement
+      if match? :print
+        print_statement
+      else
+        expression_statement
+      end
+    end
+
+    # Rule
+    #  printStatement -> "print" expression ";" ;
+    def print_statement
+      expr = expression
+      consume :semicolon, "Expect ';' after expression."
+      Statement::Print.new expr
+    end
+
+    # Rule
+    #  expressionStatement -> expression ";" ;
+    def expression_statement
+      expr = expression
+      consume :semicolon, "Expect ';' after expression."
+      Statement::Expression.new expr
+    end
 
     # Rule
     #  expression -> equality

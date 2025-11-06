@@ -12,7 +12,11 @@ module GoldyLox
     def initialize: (Array[Token]) -> void
 
     # @raise ParseError
-    def parse: () -> Array[Expression]
+    def parse: () -> Array[Statement]
+
+    def statement: () -> Statement
+    def expression_statement: () -> Statement
+    def print_statement: () -> Statement
 
     def expression: () -> Expression
     def equality: () -> Expression

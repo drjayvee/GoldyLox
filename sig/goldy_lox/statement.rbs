@@ -1,0 +1,17 @@
+module GoldyLox
+  class Statement
+    def self.attrs: (*Symbol) -> void
+
+    class Expression < Statement
+      attr_reader expression: GoldyLox::Expression
+
+      def initialize: (GoldyLox::Expression expression) -> void
+    end
+
+    class Print < Statement
+      attr_reader expression: GoldyLox::Expression
+
+      def initialize: (GoldyLox::Expression expression) -> void
+    end
+  end
+end

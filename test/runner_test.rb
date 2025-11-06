@@ -21,13 +21,13 @@ class RunnerTest < Minitest::Test
   end
 
   def test_interpreter_error
-    @runner.run "1 + nil"
+    @runner.run "1 + nil;"
 
     assert_equal ["! Invalid operand for plus: nil (:1)\n"], @out
   end
 
   def test_happy_path
-    @runner.run "(2 + 3) * 5"
+    @runner.run "(2 + 3) * 5;"
 
     assert_equal ["=> 25.0\n"], @out
   end
