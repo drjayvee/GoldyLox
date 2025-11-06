@@ -1,7 +1,0 @@
-# frozen_string_literal: true
-
-module GoldyLox
-  module AttrsHelper
-    def attrs: (*Symbol) -> void
-  end
-end
