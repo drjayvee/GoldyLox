@@ -41,7 +41,7 @@ module GoldyLox
     def equality
       expr = comparison
 
-      while match?(:bang_equal, :equal_equal) do
+      while match?(:bang_equal, :equal_equal)
         operator = previous
         right = comparison
         expr = Expression::Binary.new expr, operator, right
@@ -55,7 +55,7 @@ module GoldyLox
     def comparison
       expr = term
 
-      while match?(:greater, :greater_equal, :less, :less_equal) do
+      while match?(:greater, :greater_equal, :less, :less_equal)
         operator = previous
         right = term
         expr = Expression::Binary.new expr, operator, right
@@ -69,7 +69,7 @@ module GoldyLox
     def term
       expr = factor
 
-      while match?(:minus, :plus) do
+      while match?(:minus, :plus)
         operator = previous
         expr = Expression::Binary.new expr, operator, term
       end
@@ -82,7 +82,7 @@ module GoldyLox
     def factor
       expr = unary
 
-      while match?(:slash, :star) do
+      while match?(:slash, :star)
         operator = previous
         right = unary
         expr = Expression::Binary.new expr, operator, right
