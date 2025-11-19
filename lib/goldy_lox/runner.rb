@@ -9,7 +9,9 @@ module GoldyLox
     def run(lox)
       tokens = (scanner = GoldyLox::Scanner.new(lox)).scan_tokens
       if scanner.errors.any?
-        scanner.errors.each { log_error it.message, it.line }
+        scanner.errors.each do |error|
+          log_error error.message, error.line
+        end
         return
       end
 
