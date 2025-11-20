@@ -7,7 +7,7 @@ class AstPrinterTest < Minitest::Test
     @printer = GoldyLox::AstPrinter.new
   end
 
-  def test_binary
+  def test_binary_expression
     expr = GoldyLox::Expression::Binary.new(
       GoldyLox::Expression::Literal.new(13),
       GoldyLox::Token.new(:plus, 1, "+"),
@@ -17,7 +17,7 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(+ 13 37)", @printer.print(expr)
   end
 
-  def test_literal
+  def test_literal_expression
     { "hi" => "hi", true => "true", false => "false", nil => "nil" }.each do |value, string|
       literal = GoldyLox::Expression::Literal.new value
 
@@ -25,7 +25,7 @@ class AstPrinterTest < Minitest::Test
     end
   end
 
-  def test_grouping
+  def test_grouping_expression
     grouping = GoldyLox::Expression::Grouping.new(
       GoldyLox::Expression::Literal.new(123)
     )
@@ -33,7 +33,7 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(group 123)", @printer.print(grouping)
   end
 
-  def test_unary
+  def test_unary_expression
     unary = GoldyLox::Expression::Unary.new(
       GoldyLox::Token.new(:plus, 1, "+"),
       GoldyLox::Expression::Literal.new("")
@@ -42,7 +42,7 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(+ )", @printer.print(unary)
   end
 
-  def test_statement_expression
+  def test_expression_statement
     statement = GoldyLox::Statement::Expression.new(
       GoldyLox::Expression::Literal.new(123)
     )
@@ -50,7 +50,7 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(expr 123)", @printer.print(statement)
   end
 
-  def test_print_expression
+  def test_print_statement
     statement = GoldyLox::Statement::Print.new(
       GoldyLox::Expression::Literal.new(123)
     )
