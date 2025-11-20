@@ -29,7 +29,7 @@ module GoldyLox
 
     # Rule
     #  statement -> expressionStatement
-    #            | printStatement
+    #            | printStatement ;
     def statement
       if match? :print
         print_statement

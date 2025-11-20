@@ -9,6 +9,8 @@ module GoldyLox
     @tokens: Array[Token]
     @current: Integer
 
+    attr_reader errors: Array[ParseError]
+
     def initialize: (Array[Token]) -> void
 
     # @raise ParseError
