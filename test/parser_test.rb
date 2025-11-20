@@ -10,7 +10,7 @@ class ParserTest < Minitest::Test
   # @param tokens Array[GoldyLox::Token]
   # @return GoldyLox::Parser
   def parser(tokens)
-    tokens << [:eof, tokens.last[1], ""]
+    tokens += [[:eof, tokens.last[1], ""]] # copy and push
     tokens = tokens.map do |token_args|
       GoldyLox::Token.new(*token_args)
     end
@@ -169,6 +169,36 @@ class ParserTest < Minitest::Test
     assert_equal 1, statements.size
     assert_kind_of GoldyLox::Statement::Print, statements.first
     assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
+  end
+
+  def test_var_statement
+    tokens = [
+      [:var, 1, "var"],
+      [:identifier, 1, "foo"]
+      # missing semicolon
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError) { parser(tokens).parse }
+
+    # without initializer
+    tokens << [:semicolon, 1, ";"]
+
+    statements = parser(tokens).parse
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Var, statements.first
+    assert_equal "foo", statements.first.name.lexeme
+    assert_nil statements.first.initializer
+
+    # with initializer
+    tokens.insert(2, [:equal, 1, "="], [:number, 1, "123"])
+
+    statements = parser(tokens).parse
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Var, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.initializer
+
+    # with initializer, but missing semicolon
+    assert_raises(GoldyLox::Parser::ParseError) { parser(tokens[..-2]).parse }
   end
 
   def test_store_synchronizable_parse_error

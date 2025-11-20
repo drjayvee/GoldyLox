@@ -15,6 +15,12 @@ module GoldyLox
       parenthesize "print", stmt.expression
     end
 
+    def visit_var(stmt)
+      str = +"(var #{stmt.name.lexeme}"
+      str << " = #{stmt.initializer.accept(self)}" unless stmt.initializer.nil?
+      str << ")"
+    end
+
     def visit_binary(expr)
       parenthesize expr.operator.lexeme, expr.left, expr.right
     end

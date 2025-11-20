@@ -21,11 +21,32 @@ module GoldyLox
 
     def parse
       statements = []
-      statements << statement until end? || match?(:eof)
+      statements << declaration until end? || match?(:eof)
+
       statements
     end
 
     private
+
+    # Rule
+    #  declaration -> variableDeclaration
+    #              | statement ;
+    def declaration
+      if match? :var
+        var_declaration
+      else
+        statement
+      end
+    end
+
+    # Rule
+    #  variableDeclaration -> "var" IDENTIFIER ( "=" expression )? ";" ;
+    def var_declaration
+      name = consume :identifier, "Expect variable name."
+      initializer = match?(:equal) ? expression : nil
+      consume :semicolon, "Expect ';' after variable declaration."
+      Statement::Var.new(name, initializer)
+    end
 
     # Rule
     #  statement -> expressionStatement

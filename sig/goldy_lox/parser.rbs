@@ -16,6 +16,8 @@ module GoldyLox
     # @raise ParseError
     def parse: () -> Array[Statement]
 
+    def declaration: () -> Statement
+    def var_declaration: () -> Statement
     def statement: () -> Statement
     def expression_statement: () -> Statement
     def print_statement: () -> Statement

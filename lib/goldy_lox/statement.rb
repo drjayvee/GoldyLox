@@ -27,5 +27,9 @@ module GoldyLox
     class Print < Statement # :nodoc:
       attrs :expression
     end
+
+    class Var < Statement # :nodoc:
+      attrs :name, :initializer
+    end
   end
 end

@@ -15,5 +15,12 @@ module GoldyLox
 
       def initialize: (GoldyLox::Expression expression) -> void
     end
+
+    class Var
+      attr_reader name: Token
+      attr_reader initializer: GoldyLox::Expression?
+
+      def initialize: (Token name, GoldyLox::Expression? initializer) -> void
+    end
   end
 end

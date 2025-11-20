@@ -36,6 +36,10 @@ module GoldyLox
       @out << "#{stmt.expression.accept(self)}\n"
     end
 
+    def visit_var(stmt)
+      raise "var statements not yet implemented"
+    end
+
     def visit_binary(expr)
       left = expr.left.accept self
       right = expr.right.accept self
