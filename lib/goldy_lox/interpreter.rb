@@ -67,7 +67,7 @@ module GoldyLox
       when :less then left < right
       when :less_equal then left <= right
       else
-        raise RuntimeError "Invalid operator"
+        raise "Invalid operator"
       end
     end
 
@@ -88,7 +88,7 @@ module GoldyLox
         -value
       when :bang then !value # "Lox follows Ruby’s simple rule: false and nil are falsey, and everything else is truthy"
       else
-        raise RuntimeError "Invalid operator"
+        raise "Invalid operator"
       end
     end
 

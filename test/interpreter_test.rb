@@ -53,6 +53,15 @@ class InterpreterTest < Minitest::Test
     assert_equal true, evaluate("!!true")
   end
 
+  def test_unary_with_invalid_operator
+    assert_raises RuntimeError, "Invalid operator" do
+      @interpreter.evaluate GoldyLox::Expression::Unary.new(
+        GoldyLox::Token.new(:plus, 1, "+"),
+        GoldyLox::Expression::Literal.new(1)
+      )
+    end
+  end
+
   def test_grouping
     assert_equal 1, evaluate("(1)")
     assert_equal true, evaluate("(true)")
@@ -88,6 +97,16 @@ class InterpreterTest < Minitest::Test
 
     ["true + 1", "1 + true", "1 + false", "1 + nil", "1 + \"1\"", "\"1\" + 1"].each do |expr|
       assert_raises(GoldyLox::Interpreter::InvalidOperandError) { evaluate expr }
+    end
+  end
+
+  def test_binary_with_invalid_operator
+    assert_raises "Invalid operator" do
+      @interpreter.evaluate GoldyLox::Expression::Binary.new(
+        GoldyLox::Expression::Literal.new(1),
+        GoldyLox::Token.new(:bang, 1, "+"),
+        GoldyLox::Expression::Literal.new(1)
+      )
     end
   end
 
