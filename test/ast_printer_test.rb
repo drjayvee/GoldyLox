@@ -42,7 +42,7 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(+ )", @printer.print(unary)
   end
 
-  def test_variable
+  def test_variable_expression
     variable = GoldyLox::Expression::Variable.new(
       GoldyLox::Token.new(:identifier, 1, "foo")
     )
