@@ -60,6 +60,12 @@ class InterpreterTest < Minitest::Test
     assert_nil evaluate("((nil))")
   end
 
+  def test_variable_expression
+    assert_raises RuntimeError, "Variables not yet implemented" do
+      evaluate "foo"
+    end
+  end
+
   def test_binary_minus
     assert_equal 5, evaluate("7 - 2")
     assert_equal 5, evaluate("5 - 0")

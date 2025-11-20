@@ -15,7 +15,7 @@ class RunnerTest < Minitest::Test
   end
 
   def test_parser_error
-    @runner.run "oops"
+    @runner.run "-"
 
     assert_equal ["! Expect expression (:1)\n"], @out
   end

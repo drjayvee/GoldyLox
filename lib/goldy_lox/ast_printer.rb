@@ -33,6 +33,10 @@ module GoldyLox
       parenthesize expr.operator.lexeme, expr.right
     end
 
+    def visit_variable(expr)
+      "variable #{expr.name.lexeme}"
+    end
+
     private
 
     def parenthesize(name, *exprs)

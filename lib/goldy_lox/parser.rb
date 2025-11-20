@@ -129,13 +129,17 @@ module GoldyLox
     end
 
     # Rule
-    #  primary -> NUMBER | STRING | "true" | "false" | "nil"
-    #          | "(" expression ")" ;
+    #  primary -> "true" | "false" | "nil"
+    #          | NUMBER | STRING
+    #          | "(" expression ")"
+    #          | IDENTIFIER ;
     def primary
       return Expression::Literal.new(previous.literal) if match? :number, :string
       return Expression::Literal.new(true) if match? :true
       return Expression::Literal.new(false) if match? :false
       return Expression::Literal.new(nil) if match? :nil
+
+      return Expression::Variable.new previous if match? :identifier
 
       if match? :left_paren
         expr = expression

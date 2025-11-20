@@ -30,5 +30,11 @@ module GoldyLox
 
       def initialize: (Token operator, Expression right) -> void
     end
+
+    class Variable < Expression
+      attr_reader name: Token
+
+      def initialize: (Token name) -> void
+    end
   end
 end

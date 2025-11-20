@@ -4,5 +4,6 @@ module GoldyLox
     def visit_grouping: (Expression::Grouping) -> R
     def visit_literal: (Expression::Literal) -> R
     def visit_unary: (Expression::Unary) -> R
+    def visit_variable: (Expression::Variable) -> R
   end
 end

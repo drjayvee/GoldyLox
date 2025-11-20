@@ -92,6 +92,10 @@ module GoldyLox
       end
     end
 
+    def visit_variable(expr)
+      raise "Variables not yet implemented"
+    end
+
     def assert_numeric_operands(operator, *operands)
       operands.each do |operand|
         raise InvalidOperandError.new(operator, operand) unless operand.is_a?(Numeric)

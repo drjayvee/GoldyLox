@@ -46,5 +46,9 @@ module GoldyLox
     class Unary < Expression # :nodoc:
       attrs :operator, :right
     end
+
+    class Variable < Expression # :nodoc:
+      attrs :name
+    end
   end
 end
