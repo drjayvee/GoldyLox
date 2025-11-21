@@ -1,0 +1,15 @@
+module GoldyLox
+  class Environment
+    class UndefinedVariableError < RuntimeError
+      attr_reader identifier: Token
+
+      def initialize: (Token identifier) -> void
+    end
+
+    @values: Hash[String, untyped]
+
+    def define: (String name, untyped value) -> void
+
+    def get: (Token identifier) -> untyped
+  end
+end
