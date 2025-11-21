@@ -4,9 +4,9 @@ module GoldyLox
   # see https://craftinginterpreters.com/statements-and-state.html#environments
   class Environment
     class UndefinedVariableError < RuntimeError # :nodoc:
-      def initialize(identifier)
-        @identifier = identifier
-        super("Undefined variable #{identifier.lexeme}")
+      def initialize(name)
+        @identifier = name
+        super("Undefined variable #{name.lexeme}")
       end
     end
 
@@ -18,10 +18,10 @@ module GoldyLox
       @values[name] = value
     end
 
-    def get(identifier)
-      variable_name = identifier.lexeme
+    def get(name)
+      variable_name = name.lexeme
 
-      raise UndefinedVariableError, identifier unless @values.key? variable_name
+      raise UndefinedVariableError.new(name) unless @values.key? variable_name
 
       @values[variable_name]
     end
