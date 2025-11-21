@@ -14,6 +14,7 @@ module GoldyLox
 
     def initialize(out = $stdout)
       @out = out
+      @environment = Environment.new
     end
 
     def interpret(statements)
@@ -37,7 +38,13 @@ module GoldyLox
     end
 
     def visit_var(stmt)
-      raise "var statements not yet implemented"
+      value = if stmt.initializer.nil?
+        nil
+      else
+        evaluate stmt.initializer
+      end
+
+      @environment.define stmt.name.lexeme, value
     end
 
     def visit_binary(expr)
@@ -97,7 +104,7 @@ module GoldyLox
     end
 
     def visit_variable(expr)
-      raise "Variables not yet implemented"
+      @environment.get expr.name
     end
 
     def assert_numeric_operands(operator, *operands)

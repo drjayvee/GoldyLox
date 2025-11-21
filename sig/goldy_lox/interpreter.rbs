@@ -11,6 +11,7 @@ module GoldyLox
     include _StatementVisitor[void]
 
     @out: _Appendable
+    @environment: Environment
 
     def initialize: (_Appendable) -> void
 

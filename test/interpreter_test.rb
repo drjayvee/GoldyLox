@@ -69,10 +69,15 @@ class InterpreterTest < Minitest::Test
     assert_nil evaluate("((nil))")
   end
 
-  def test_variable_expression
-    assert_raises RuntimeError, "Variables not yet implemented" do
-      evaluate "foo"
-    end
+  def test_variable_statement_and_expression
+    @interpreter.interpret [
+      GoldyLox::Statement::Var.new(
+        GoldyLox::Token.new(:identifier, 1, "foo"),
+        GoldyLox::Expression::Literal.new(1337)
+      )
+    ]
+
+    assert_equal 1337, evaluate("foo")
   end
 
   def test_binary_minus
