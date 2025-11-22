@@ -4,9 +4,9 @@ module GoldyLox
   # see https://craftinginterpreters.com/statements-and-state.html#environments
   class Environment
     class UndefinedVariableError < RuntimeError # :nodoc:
-      def initialize(name)
-        @identifier = name
-        super("Undefined variable #{name.lexeme}")
+      def initialize(message, name)
+        super(message)
+        @name = name
       end
     end
 
@@ -21,9 +21,27 @@ module GoldyLox
     def get(name)
       variable_name = name.lexeme
 
-      raise UndefinedVariableError.new(name) unless @values.key? variable_name
+      assert_defined name
 
       @values[variable_name]
+    end
+
+    def put(name, value)
+      variable_name = name.lexeme
+
+      assert_defined name
+
+      @values[variable_name] = value
+    end
+
+    private
+
+    def assert_defined(name)
+      variable_name = name.lexeme
+
+      unless @values.key? variable_name
+        raise UndefinedVariableError.new("Undefined variable #{name.lexeme}", name)
+      end
     end
   end
 end

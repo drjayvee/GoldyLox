@@ -4,6 +4,13 @@ module GoldyLox
 
     def self.attrs: (*Symbol) -> void
 
+    class Assignment
+      attr_reader name: Token
+      attr_reader value: Expression
+
+      def initialize: (Token name, Expression value) -> void
+    end
+
     class Binary < Expression
       attr_reader left: Expression
       attr_reader operator: Token

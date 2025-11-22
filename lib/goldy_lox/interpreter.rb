@@ -47,6 +47,10 @@ module GoldyLox
       @environment.define stmt.name.lexeme, value
     end
 
+    def visit_assignment(expr)
+      @environment.put expr.name, evaluate(expr.value)
+    end
+
     def visit_binary(expr)
       left = expr.left.accept self
       right = expr.right.accept self

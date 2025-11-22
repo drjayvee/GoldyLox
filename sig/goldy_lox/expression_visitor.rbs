@@ -1,5 +1,6 @@
 module GoldyLox
   interface _ExpressionVisitor[R]
+    def visit_assignment: (Expression::Assignment) -> R
     def visit_binary: (Expression::Binary) -> R
     def visit_grouping: (Expression::Grouping) -> R
     def visit_literal: (Expression::Literal) -> R

@@ -23,6 +23,7 @@ module GoldyLox
     def print_statement: () -> Statement
 
     def expression: () -> Expression
+    def assignment: () -> Expression
     def equality: () -> Expression
     def comparison: () -> Expression
     def term: () -> Expression

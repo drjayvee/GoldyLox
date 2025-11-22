@@ -21,6 +21,12 @@ module GoldyLox
       str << ")"
     end
 
+    def visit_assignment(expr)
+      str = +"(#{expr.name.lexeme} = "
+      str << expr.value.accept(self)
+      str << ")"
+    end
+
     def visit_binary(expr)
       parenthesize expr.operator.lexeme, expr.left, expr.right
     end

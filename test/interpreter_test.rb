@@ -80,6 +80,26 @@ class InterpreterTest < Minitest::Test
     assert_equal 1337, evaluate("foo")
   end
 
+  def test_assignment
+    # define variable first
+    @interpreter.interpret [
+      GoldyLox::Statement::Var.new(
+        GoldyLox::Token.new(:identifier, 1, "foo"),
+        nil
+      )
+    ]
+
+    # now assign new value
+    assert_equal 1337, evaluate("foo = 1337") # expression evaluates to r-value...
+    assert_equal 1337, evaluate("foo") # and updates the variable's value
+  end
+
+  def test_cannot_assign_to_undefined_target
+    assert_raises GoldyLox::Environment::UndefinedVariableError, "Undefined variable 'foo'" do
+      evaluate "foo = 1"
+    end
+  end
+
   def test_binary_minus
     assert_equal 5, evaluate("7 - 2")
     assert_equal 5, evaluate("5 - 0")

@@ -31,6 +31,10 @@ module GoldyLox
       end
     end
 
+    class Assignment < Expression # :nodoc:
+      attrs :name, :value
+    end
+
     class Binary < Expression # :nodoc:
       attrs :left, :operator, :right
     end

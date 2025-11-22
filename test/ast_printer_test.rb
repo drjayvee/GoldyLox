@@ -7,6 +7,19 @@ class AstPrinterTest < Minitest::Test
     @printer = GoldyLox::AstPrinter.new
   end
 
+  def test_assignment_expression
+    # foo = -1
+    expr = GoldyLox::Expression::Assignment.new(
+      GoldyLox::Token.new(:identifier, 1, "foo"),
+      GoldyLox::Expression::Unary.new(
+        GoldyLox::Token.new(:minus, 1, "-"),
+        GoldyLox::Expression::Literal.new(1)
+      )
+    )
+
+    assert_equal "(foo = (- 1))", @printer.print(expr)
+  end
+
   def test_binary_expression
     expr = GoldyLox::Expression::Binary.new(
       GoldyLox::Expression::Literal.new(13),

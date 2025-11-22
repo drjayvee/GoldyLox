@@ -201,6 +201,65 @@ class ParserTest < Minitest::Test
     assert_raises(GoldyLox::Parser::ParseError) { parser(tokens[..-2]).parse }
   end
 
+  def test_invalid_assignment_target
+    # 1 = 1
+    assert_raises "Invalid assignment target" do
+      parse_expression [
+        [:number, 1, "1", 1],
+        [:equal, 1, "="],
+        [:number, 1, "1", 1]
+      ]
+    end
+
+    # (a) = 3
+    assert_raises "Invalid assignment target" do
+      parse_expression [
+        [:left_paren, 1, "1"],
+        [:identifier, 1, "a"],
+        [:right_paren, 1, "1"],
+        [:equal, 1, "="],
+        [:number, 1, "3", 3]
+      ]
+    end
+  end
+
+  def test_assignment_expression
+    # a = 1
+    expr = parse_expression [
+      [:identifier, 1, "a"],
+      [:equal, 1, "="],
+      [:number, 1, "1", 1]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Assignment, expr
+    assert_equal "a", expr.name.lexeme
+    assert_kind_of GoldyLox::Expression::Literal, expr.value
+  end
+
+  def test_assignment_chain
+    # a = b = 5 + 5
+    expr = parse_expression [
+      [:identifier, 1, "a"],
+      [:equal, 1, "="],
+      [:identifier, 1, "b"],
+      [:equal, 1, "="],
+      [:number, 1, "5", 5],
+      [:plus, 1, "+"],
+      [:number, 1, "5", 5]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Assignment, expr
+
+    # assignment is right-associative
+    assert_equal "a", expr.name.lexeme
+    assert_kind_of GoldyLox::Expression::Assignment, expr.value
+
+    assert_equal "b", expr.value.name.lexeme
+    assert_kind_of GoldyLox::Expression::Binary, expr.value.value
+
+    assert_equal "(a = (b = (+ 5 5)))", @printer.print(expr)
+  end
+
   def test_store_synchronizable_parse_error
     # (1
     parser = self.parser [

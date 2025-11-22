@@ -76,9 +76,27 @@ module GoldyLox
     end
 
     # Rule
-    #  expression -> equality
+    #  expression -> assignment ;
     def expression
-      equality
+      assignment
+    end
+
+    # Rule
+    #  assignment -> IDENTIFIER "=" assignment
+    #             | equality ;
+    def assignment
+      expr = equality
+
+      if match? :equal
+        equals = previous
+        value = assignment # assignment is right-associative
+
+        error(equals, "Invalid assignment target") unless expr.is_a? Expression::Variable
+
+        return Expression::Assignment.new(expr.name, value)
+      end
+
+      expr
     end
 
     # Rule
