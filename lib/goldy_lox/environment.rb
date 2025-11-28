@@ -39,7 +39,7 @@ module GoldyLox
     def assert_defined(name)
       variable_name = name.lexeme
 
-      unless @values.key? variable_name
+      unless @values.key? variable_name # rubocop:disable Style/GuardClause
         raise UndefinedVariableError.new("Undefined variable #{name.lexeme}", name)
       end
     end

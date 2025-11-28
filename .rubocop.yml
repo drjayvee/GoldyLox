@@ -20,5 +20,8 @@ Layout/EndAlignment:
 Layout/LineLength:
   Max: 120
 
+Lint/BooleanSymbol:
+  Enabled: false
+
 Metrics:
   Enabled: false

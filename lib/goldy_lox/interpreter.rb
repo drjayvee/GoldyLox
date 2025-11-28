@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Interpreter
+  class Interpreter # :nodoc:
     class InvalidOperandError < RuntimeError # :nodoc:
       attr_reader :operator, :value
 

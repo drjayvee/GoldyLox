@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Statement
+  class Statement # :nodoc:
     def accept(visitor)
       class_name = self.class.name.split("::").last
       visitor.send "visit_#{class_name.downcase}", self
