@@ -1,8 +1,11 @@
 module GoldyLox
   class Runner
     @out: _Appendable
+    @err: _Appendable
+    @printer: AstPrinter
+    @interpreter: Interpreter
 
-    def initialize: (?_Appendable) -> void
+    def initialize: (?_Appendable out, ?_Appendable err) -> void
 
     def run: (String) -> void
 

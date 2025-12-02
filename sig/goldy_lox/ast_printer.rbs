@@ -1,5 +1,5 @@
 module GoldyLox
-  class AstPrinter[String]
+  class AstPrinter
     include _ExpressionVisitor[String]
     include _StatementVisitor[String]
 

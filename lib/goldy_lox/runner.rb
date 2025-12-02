@@ -2,8 +2,12 @@
 
 module GoldyLox
   class Runner # :nodoc:
-    def initialize(out = $stdout)
+    def initialize(out = $stdout, err = $stderr)
       @out = out
+      @err = err
+
+      @printer = AstPrinter.new
+      @interpreter = GoldyLox::Interpreter.new(@out)
     end
 
     def run(lox)
@@ -22,8 +26,10 @@ module GoldyLox
         return
       end
 
+      statements.each { @err << "#{@printer.print(it)}\n" }
+
       begin
-        GoldyLox::Interpreter.new(@out).interpret statements
+        @interpreter.interpret statements
       rescue Interpreter::InvalidOperandError => e
         log_error e.message, e.operator.line
       end
