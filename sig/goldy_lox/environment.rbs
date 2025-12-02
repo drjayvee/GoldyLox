@@ -6,7 +6,10 @@ module GoldyLox
       def initialize: (String message, Token name) -> void
     end
 
+    @enclosing: instance?
     @values: Hash[String, untyped]
+
+    def initialize: (?instance? enclosing) -> void
 
     def define: (String name, untyped value) -> void
 

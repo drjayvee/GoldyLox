@@ -10,7 +10,8 @@ module GoldyLox
       end
     end
 
-    def initialize
+    def initialize(enclosing = nil)
+      @enclosing = enclosing
       @values = {}
     end
 
@@ -21,27 +22,27 @@ module GoldyLox
     def get(name)
       variable_name = name.lexeme
 
-      assert_defined name
+      return @values[variable_name] if @values.key?(variable_name)
 
-      @values[variable_name]
+      return @enclosing.get(name) unless @enclosing.nil?
+
+      raise UndefinedVariableError.new("Undefined variable #{variable_name}", name)
     end
 
     def assign(name, value)
       variable_name = name.lexeme
 
-      assert_defined name
-
-      @values[variable_name] = value
-    end
-
-    private
-
-    def assert_defined(name)
-      variable_name = name.lexeme
-
-      unless @values.key? variable_name # rubocop:disable Style/GuardClause
-        raise UndefinedVariableError.new("Undefined variable #{name.lexeme}", name)
+      if @values.key?(variable_name)
+        @values[variable_name] = value
+        return
       end
+
+      unless @enclosing.nil?
+        @enclosing.assign name, value
+        return
+      end
+
+      raise UndefinedVariableError.new("Undefined variable #{variable_name}", name)
     end
   end
 end
