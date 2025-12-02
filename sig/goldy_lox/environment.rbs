@@ -12,7 +12,7 @@ module GoldyLox
 
     def get: (Token name) -> untyped
 
-    def put: (Token name, untyped value) -> void
+    def assign: (Token name, untyped value) -> void
 
     private
 

@@ -48,7 +48,7 @@ module GoldyLox
     end
 
     def visit_assignment(expr)
-      @environment.put expr.name, evaluate(expr.value)
+      @environment.assign expr.name, evaluate(expr.value)
     end
 
     def visit_binary(expr)

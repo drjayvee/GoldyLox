@@ -26,7 +26,7 @@ module GoldyLox
       @values[variable_name]
     end
 
-    def put(name, value)
+    def assign(name, value)
       variable_name = name.lexeme
 
       assert_defined name
