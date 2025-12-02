@@ -21,6 +21,7 @@ module GoldyLox
     def statement: () -> Statement
     def expression_statement: () -> Statement
     def print_statement: () -> Statement
+    def block: () -> Array[Statement]
 
     def expression: () -> Expression
     def assignment: () -> Expression

@@ -17,6 +17,7 @@ module GoldyLox
 
     def interpret: (Array[Statement]) -> void
     def execute: (Statement) -> void
+    def execute_block: (Array[Statement], Environment) -> void
     def evaluate: (Expression) -> untyped
 
     def assert_numeric_operands: (Token operator, *untyped operands) -> void

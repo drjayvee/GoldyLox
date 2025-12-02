@@ -50,10 +50,13 @@ module GoldyLox
 
     # Rule
     #  statement -> expressionStatement
-    #            | printStatement ;
+    #            | printStatement
+    #            | block ;
     def statement
       if match? :print
         print_statement
+      elsif match? :left_brace
+        Statement::Block.new block
       else
         expression_statement
       end
@@ -73,6 +76,17 @@ module GoldyLox
       expr = expression
       consume :semicolon, "Expect ';' after expression."
       Statement::Print.new expr
+    end
+
+    # Rule
+    #  block -> "{" declaration* "}" ;
+    def block
+      statements = []
+      statements << declaration until check?(:right_brace) || end?
+
+      consume :right_brace, "Expect '}' after block."
+
+      statements
     end
 
     # Rule

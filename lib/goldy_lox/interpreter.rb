@@ -29,6 +29,12 @@ module GoldyLox
       expr.accept self
     end
 
+    # region _StatementVisitor
+
+    def visit_block(stmt)
+      execute_block stmt.statements, Environment.new(@environment)
+    end
+
     def visit_expression(stmt)
       stmt.expression.accept self
     end
@@ -46,6 +52,10 @@ module GoldyLox
 
       @environment.define stmt.name.lexeme, value
     end
+
+    # endregion
+
+    # region _ExpressionVisitor
 
     def visit_assignment(expr)
       value = evaluate expr.value
@@ -113,6 +123,18 @@ module GoldyLox
 
     def visit_variable(expr)
       @environment.get expr.name
+    end
+
+    # endregion
+
+    private
+
+    def execute_block(statements, environment)
+      previous_environment = @environment
+      @environment = environment
+      interpret statements
+    ensure
+      @environment = previous_environment
     end
 
     def assert_numeric_operands(operator, *operands)

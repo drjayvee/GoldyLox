@@ -7,6 +7,12 @@ module GoldyLox
       expr.accept(self)
     end
 
+    def visit_block(stmt)
+      str = +"{ "
+      stmt.statements.each { str << print(it) }
+      str << " }"
+    end
+
     def visit_expression(stmt)
       parenthesize "expr", stmt.expression
     end

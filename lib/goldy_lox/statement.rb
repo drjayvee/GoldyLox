@@ -20,6 +20,10 @@ module GoldyLox
       end
     end
 
+    class Block < Statement # :nodoc:
+      attrs :statements
+    end
+
     class Expression < Statement # :nodoc:
       attrs :expression
     end

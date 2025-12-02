@@ -79,6 +79,19 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(print 123)", @printer.print(statement)
   end
 
+  def test_block_statement
+    statement = GoldyLox::Statement::Block.new [
+      GoldyLox::Statement::Expression.new(
+        GoldyLox::Expression::Literal.new(123)
+      ),
+      GoldyLox::Statement::Print.new(
+        GoldyLox::Expression::Literal.new("foo")
+      )
+    ]
+
+    assert_equal "{ (expr 123)(print foo) }", @printer.print(statement)
+  end
+
   def test_var_statement
     # without initializer: `var foo`
     var = GoldyLox::Statement::Var.new(

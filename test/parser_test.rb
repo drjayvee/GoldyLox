@@ -171,6 +171,47 @@ class ParserTest < Minitest::Test
     assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
   end
 
+  def test_block_statement
+    # { true; print 5; };
+    parser = self.parser [
+      [:left_brace, 1, "{"],
+      [:true, 2, "true"],
+      [:semicolon, 2, ";"],
+      [:print, 3, "print"],
+      [:number, 3, "5", 5],
+      [:semicolon, 3, ";"],
+      [:right_brace, 4, "}"]
+    ]
+
+    statements = parser.parse
+
+    assert_kind_of GoldyLox::Statement::Block, block = statements.first
+    assert_equal 2, block.statements.size
+    assert_kind_of GoldyLox::Statement::Expression, block.statements.first
+    assert_kind_of GoldyLox::Statement::Print, block.statements[1]
+  end
+
+  def test_empty_block_statement
+    parser = self.parser [
+      [:left_brace, 1, "{"],
+      [:right_brace, 1, "}"]
+    ]
+    statements = parser.parse
+
+    assert_kind_of GoldyLox::Statement::Block, statements.first
+    assert_empty statements.first.statements
+  end
+
+  def test_block_statement_raises_if_right_brace_missing
+    parser = self.parser [
+      [:left_brace, 1, "{"]
+    ]
+
+    assert_raises GoldyLox::Parser::ParseError, "Expect '}' after block." do
+      parser.parse
+    end
+  end
+
   def test_var_statement
     tokens = [
       [:var, 1, "var"],

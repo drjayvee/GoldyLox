@@ -4,6 +4,12 @@ module GoldyLox
 
     def self.attrs: (*Symbol) -> void
 
+    class Block < Statement
+      attr_reader statements: Array[Statement]
+
+      def initialize: (Array[Statement] statements) -> void
+    end
+
     class Expression < Statement
       attr_reader expression: GoldyLox::Expression
 
