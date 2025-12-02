@@ -60,19 +60,19 @@ module GoldyLox
     end
 
     # Rule
-    #  printStatement -> "print" expression ";" ;
-    def print_statement
-      expr = expression
-      consume :semicolon, "Expect ';' after expression."
-      Statement::Print.new expr
-    end
-
-    # Rule
     #  expressionStatement -> expression ";" ;
     def expression_statement
       expr = expression
       consume :semicolon, "Expect ';' after expression."
       Statement::Expression.new expr
+    end
+
+    # Rule
+    #  printStatement -> "print" expression ";" ;
+    def print_statement
+      expr = expression
+      consume :semicolon, "Expect ';' after expression."
+      Statement::Print.new expr
     end
 
     # Rule
