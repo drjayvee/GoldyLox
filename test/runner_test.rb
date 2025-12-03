@@ -5,7 +5,8 @@ require_relative "test_helper"
 class RunnerTest < Minitest::Test
   def setup
     @out = []
-    @runner = GoldyLox::Runner.new @out
+    @err = []
+    @runner = GoldyLox::Runner.new @out, @err
   end
 
   def test_scanner_error
