@@ -11,5 +11,7 @@ module GoldyLox
 
     def log_error: (String, Integer) -> void
     def log_result: (_ToS) -> void
+
+    def single_expression?: (Array[Statement]) -> bool
   end
 end

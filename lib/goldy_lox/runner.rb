@@ -20,6 +20,11 @@ module GoldyLox
       end
 
       begin
+        last_token = tokens[-2] # last token _excluding_ :eof
+        unless %i[semicolon right_brace].include?(last_token.type)
+          tokens.insert(-2, GoldyLox::Token.new(:semicolon, last_token.line, ";")) # turn a single expression into an expression statement.
+        end
+
         statements = GoldyLox::Parser.new(tokens).parse
       rescue Parser::ParseError => e
         log_error e.message, e.token.line
@@ -29,7 +34,11 @@ module GoldyLox
       statements.each { @err << "#{@printer.print(it)}\n" }
 
       begin
-        @interpreter.interpret statements
+        if single_expression?(statements)
+          log_result @interpreter.evaluate(statements.first.expression)
+        else
+          @interpreter.interpret statements
+        end
       rescue Interpreter::InvalidOperandError => e
         log_error e.message, e.operator.line
       end
@@ -39,6 +48,14 @@ module GoldyLox
 
     def log_error(message, line)
       @out << "! #{message} (:#{line})\n"
+    end
+
+    def log_result(value)
+      @out << "> #{value}"
+    end
+
+    def single_expression?(statements)
+      statements.length == 1 && statements.first.is_a?(GoldyLox::Statement::Expression)
     end
   end
 end

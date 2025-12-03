@@ -32,4 +32,23 @@ class RunnerTest < Minitest::Test
 
     assert_equal ["25.0\n"], @out
   end
+
+  def test_single_expression
+    {
+      "123" => "> 123.0",
+      "123;" => "> 123.0",
+      "2 + 3" => "> 5.0",
+      '("foo") + ("bar")' => "> foobar",
+    }.each do |lox, expected_output|
+      @runner.run lox
+      assert_equal [expected_output], @out
+
+      @out.clear
+    end
+
+    # single non-expression statement
+    @runner.run "var foo;"
+
+    assert_empty @out
+  end
 end
