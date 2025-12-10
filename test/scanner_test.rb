@@ -128,7 +128,7 @@ class ScannerTest < Minitest::Test
   end
 
   def test_keyword
-    %i[print this for true fun and return if super].each do |keyword|
+    %i[print this for true fun and return if super or else].each do |keyword|
       ["", " ", "  ", "\t"].each do |padding|
         tokens = scan_tokens(padding + keyword.to_s + padding)
 

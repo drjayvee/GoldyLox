@@ -6,7 +6,7 @@ module GoldyLox
     ALPHA_REGEX = /[a-zA-Z_]/
     DIGITS_RANGE = "0".."9"
 
-    KEYWORDS = %i[and class else false fun for if nil for print return super this true var while].freeze
+    KEYWORDS = %i[and class else false fun for if nil or print return super this true var while].freeze
 
     # :nodoc:
     class LexicalError < StandardError

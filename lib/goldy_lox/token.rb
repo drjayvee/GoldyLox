@@ -13,7 +13,7 @@ module GoldyLox
 
       identifier string number
 
-      and class else false fun for if nil for
+      and class else false fun for if nil or
       print return super this true var while
 
       eof
