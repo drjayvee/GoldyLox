@@ -28,6 +28,10 @@ module GoldyLox
       attrs :expression
     end
 
+    class If < Statement # :nodoc:
+      attrs :condition, :then_branch, :else_branch
+    end
+
     class Print < Statement # :nodoc:
       attrs :expression
     end

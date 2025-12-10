@@ -71,6 +71,38 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(expr 123)", @printer.print(statement)
   end
 
+  def test_if_statement
+    # if without else: `if (true) print "yes";`
+    statement = GoldyLox::Statement::If.new(
+      GoldyLox::Expression::Literal.new(true),
+      GoldyLox::Statement::Print.new(
+        GoldyLox::Expression::Literal.new("yes")
+      ),
+      nil
+    )
+
+    assert_equal "(if true (print yes))", @printer.print(statement)
+
+    # if with else: `if (foo > 0) print "yes"; else print "no";`
+    statement = GoldyLox::Statement::If.new(
+      GoldyLox::Expression::Binary.new(
+        GoldyLox::Expression::Variable.new(
+          GoldyLox::Token.new(:identifier, 1, "foo")
+        ),
+        GoldyLox::Token.new(:greater, 1, ">"),
+        GoldyLox::Expression::Literal.new(0)
+      ),
+      GoldyLox::Statement::Print.new(
+        GoldyLox::Expression::Literal.new("yes")
+      ),
+      GoldyLox::Statement::Print.new(
+        GoldyLox::Expression::Literal.new("no")
+      )
+    )
+
+    assert_equal "(if (> variable foo 0) (print yes) (print no))", @printer.print(statement)
+  end
+
   def test_print_statement
     statement = GoldyLox::Statement::Print.new(
       GoldyLox::Expression::Literal.new(123)

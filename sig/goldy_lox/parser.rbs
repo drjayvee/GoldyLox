@@ -20,6 +20,7 @@ module GoldyLox
     def var_declaration: () -> Statement
     def statement: () -> Statement
     def expression_statement: () -> Statement
+    def if_statement: -> Statement
     def print_statement: () -> Statement
     def block: () -> Array[Statement]
 

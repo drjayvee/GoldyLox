@@ -39,6 +39,14 @@ module GoldyLox
       stmt.expression.accept self
     end
 
+    def visit_if(stmt)
+      if evaluate(stmt.condition) # if the condition is truthy (Lox and Ruby agree on truthiness)
+        stmt.then_branch.accept self
+      elsif !stmt.else_branch.nil?
+        stmt.else_branch.accept self
+      end
+    end
+
     def visit_print(stmt)
       @out << "#{stmt.expression.accept(self)}\n"
     end

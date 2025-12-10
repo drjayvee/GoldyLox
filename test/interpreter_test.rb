@@ -23,6 +23,16 @@ class InterpreterTest < Minitest::Test
     @interpreter.evaluate expr
   end
 
+  def interpret(lox)
+    @out.clear
+
+    statements = GoldyLox::Parser.new(
+      GoldyLox::Scanner.new(lox).scan_tokens
+    ).parse
+
+    @interpreter.interpret statements
+  end
+
   def test_literals
     [nil, true, false, 0, 1, "", "0", "hi"].each do |literal|
       assert literal == evaluate(GoldyLox::Expression::Literal.new(literal))
@@ -180,5 +190,25 @@ class InterpreterTest < Minitest::Test
     ]
 
     assert_equal "1337", @out.join.chomp
+  end
+
+  def test_if_statement
+    # test if condition and then branch
+    interpret('if (true) print "yes";')
+
+    assert_equal "yes", @out.join.chomp
+
+    interpret('if (false) print "yes";')
+
+    assert_empty @out
+
+    # test else branch
+    interpret('if (true) print "yes"; else print "no";')
+
+    assert_equal "yes", @out.join.chomp
+
+    interpret('if (false) print "yes"; else print "no";')
+
+    assert_equal "no", @out.join.chomp
   end
 end

@@ -158,6 +158,45 @@ class ParserTest < Minitest::Test
     assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
   end
 
+  def test_if_statement
+    # missing opening parenthesis
+    tokens = [
+      [:if, 1, "if"],
+      [:true, 1, "true"],
+      [:string, 1, "then"],
+      [:semicolon, 1, ";"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Missing ( after if.") { parser(tokens).parse }
+
+    # missing closing parenthesis
+    tokens.insert(1, [:left_paren, 1, "("])
+
+    assert_raises(GoldyLox::Parser::ParseError, "Missing ) after if condition.") { parser(tokens).parse }
+
+    # valid if statement without else
+    tokens.insert(3, [:right_paren, 1, ")"])
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::If, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.condition
+    assert_kind_of GoldyLox::Statement::Expression, statements.first.then_branch
+    assert_nil statements.first.else_branch
+
+    # add else branch
+    tokens.push([:else, 1, "else"], [:string, 1, "else"], [:semicolon, 1, ";"])
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::If, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.condition
+    assert_kind_of GoldyLox::Statement::Expression, statements.first.then_branch
+    assert_kind_of GoldyLox::Statement::Expression, statements.first.else_branch
+  end
+
   def test_print_statement
     parser = self.parser [
       [:print, 1, "print"],

@@ -17,6 +17,12 @@ module GoldyLox
       parenthesize "expr", stmt.expression
     end
 
+    def visit_if(stmt)
+      str = +"(if #{print(stmt.condition)} #{print(stmt.then_branch)}"
+      str << " #{print(stmt.else_branch)}" unless stmt.else_branch.nil?
+      str << ")"
+    end
+
     def visit_print(stmt)
       parenthesize "print", stmt.expression
     end

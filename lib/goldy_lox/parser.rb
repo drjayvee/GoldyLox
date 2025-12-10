@@ -50,10 +50,13 @@ module GoldyLox
 
     # Rule
     #  statement -> expressionStatement
+    #            | ifStatement
     #            | printStatement
     #            | block ;
     def statement
-      if match? :print
+      if match? :if
+        if_statement
+      elsif match? :print
         print_statement
       elsif match? :left_brace
         Statement::Block.new block
@@ -68,6 +71,20 @@ module GoldyLox
       expr = expression
       consume :semicolon, "Expect ';' after expression."
       Statement::Expression.new expr
+    end
+
+    # Rule
+    #  ifStatement -> "if" "(" expression ")" statement
+    #              ( "else" statement )? ;
+    def if_statement
+      consume :left_paren, "Expect '(' after if."
+      condition = expression
+      consume :right_paren, "Expect ')' after if condition."
+
+      then_branch = statement
+      else_branch = match?(:else) ? statement : nil
+
+      Statement::If.new(condition, then_branch, else_branch)
     end
 
     # Rule

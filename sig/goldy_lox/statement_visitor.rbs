@@ -2,6 +2,7 @@ module GoldyLox
   interface _StatementVisitor[R]
     def visit_block: (Statement::Block) -> R
     def visit_expression: (Statement::Expression) -> R
+    def visit_if: (Statement::If) -> R
     def visit_print: (Statement::Print) -> R
     def visit_var: (Statement::Var) -> R
   end

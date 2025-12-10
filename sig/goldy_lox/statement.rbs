@@ -16,6 +16,14 @@ module GoldyLox
       def initialize: (GoldyLox::Expression expression) -> void
     end
 
+    class If < Statement
+      attr_reader condition: GoldyLox::Expression
+      attr_reader then_branch: Statement
+      attr_reader else_branch: Statement?
+
+      def initialize: (GoldyLox::Expression condition, Statement then_branch, Statement? else_branch) -> void
+    end
+
     class Print < Statement
       attr_reader expression: GoldyLox::Expression
 
