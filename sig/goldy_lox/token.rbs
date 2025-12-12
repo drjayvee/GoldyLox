@@ -9,6 +9,6 @@ module GoldyLox
 
     def initialize: (Symbol type, Integer line, String lexeme, ?nil | Numeric | String literal) -> void
 
-    def to_s: () -> String
+    def to_s: -> String
   end
 end

@@ -14,36 +14,36 @@ module GoldyLox
     def initialize: (Array[Token]) -> void
 
     # @raise ParseError
-    def parse: () -> Array[Statement]
+    def parse: -> Array[Statement]
 
-    def declaration: () -> Statement
-    def var_declaration: () -> Statement
-    def statement: () -> Statement
-    def expression_statement: () -> Statement
+    def declaration: -> Statement
+    def var_declaration: -> Statement
+    def statement: -> Statement
+    def expression_statement: -> Statement
     def if_statement: -> Statement
-    def print_statement: () -> Statement
-    def block: () -> Array[Statement]
+    def print_statement: -> Statement
+    def block: -> Array[Statement]
 
-    def expression: () -> Expression
-    def assignment: () -> Expression
-    def logical_or: () -> Expression
-    def logical_and: () -> Expression
-    def equality: () -> Expression
-    def comparison: () -> Expression
-    def term: () -> Expression
-    def factor: () -> Expression
-    def unary: () -> Expression
-    def primary: () -> Expression
+    def expression: -> Expression
+    def assignment: -> Expression
+    def logical_or: -> Expression
+    def logical_and: -> Expression
+    def equality: -> Expression
+    def comparison: -> Expression
+    def term: -> Expression
+    def factor: -> Expression
+    def unary: -> Expression
+    def primary: -> Expression
 
-    def end?: () -> bool
+    def end?: -> bool
     def match?: (*Symbol) -> bool
     def consume: (Symbol, String) -> void
-    def advance: () -> Token
+    def advance: -> Token
     def check?: (Symbol) -> bool
-    def peek: () -> Token
-    def previous: () -> Token
+    def peek: -> Token
+    def previous: -> Token
 
     def error: (Token, String) -> void
-    def synchronize: () -> void
+    def synchronize: -> void
   end
 end

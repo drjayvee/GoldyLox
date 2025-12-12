@@ -23,23 +23,23 @@ module GoldyLox
 
     def initialize: (String) -> void
 
-    def scan_tokens: () -> Array[Token]
+    def scan_tokens: -> Array[Token]
 
-    def eof?: () -> bool
+    def eof?: -> bool
 
-    def scan_token: () -> void
+    def scan_token: -> void
 
-    def string_literal: () -> void
-    def number_literal: () -> void
-    def identifier: () -> void
+    def string_literal: -> void
+    def number_literal: -> void
+    def identifier: -> void
 
     def alpha?: (String) -> bool
     def digit?: (String) -> bool
 
     def match: (String) -> bool
-    def peek: () -> String
-    def peek_next: () -> String
-    def advance: () -> String
+    def peek: -> String
+    def peek_next: -> String
+    def advance: -> String
 
     def add_token: (Symbol, ?(nil | Numeric | String)) -> void
   end
