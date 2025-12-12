@@ -61,6 +61,10 @@ module GoldyLox
       @environment.define stmt.name.lexeme, value
     end
 
+    def visit_while(stmt)
+      execute(stmt.body) while evaluate(stmt.condition)
+    end
+
     # endregion
 
     # region _ExpressionVisitor

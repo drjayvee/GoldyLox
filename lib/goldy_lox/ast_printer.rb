@@ -33,6 +33,10 @@ module GoldyLox
       str << ")"
     end
 
+    def visit_while(stmt)
+      "(while #{print(stmt.condition)} #{print(stmt.body)})"
+    end
+
     def visit_assignment(expr)
       str = +"(#{expr.name.lexeme} = "
       str << expr.value.accept(self)

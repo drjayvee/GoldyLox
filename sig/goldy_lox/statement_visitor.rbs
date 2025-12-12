@@ -5,5 +5,6 @@ module GoldyLox
     def visit_if: (Statement::If) -> R
     def visit_print: (Statement::Print) -> R
     def visit_var: (Statement::Var) -> R
+    def visit_while: (Statement::While) -> R
   end
 end

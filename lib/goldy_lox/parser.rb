@@ -53,12 +53,15 @@ module GoldyLox
     #  statement -> expressionStatement
     #            | ifStatement
     #            | printStatement
+    #            | whileStatement
     #            | block ;
     def statement
       if match? :if
         if_statement
       elsif match? :print
         print_statement
+      elsif match? :while
+        while_statement
       elsif match? :left_brace
         Statement::Block.new block
       else
@@ -94,6 +97,18 @@ module GoldyLox
       expr = expression
       consume :semicolon, "Expect ';' after expression."
       Statement::Print.new expr
+    end
+
+    # Rule
+    #  while_statement -> "while" "(" expression ")" statement ;
+    def while_statement
+      consume :left_paren, "Expect '(' after while."
+      condition = expression
+      consume :right_paren, "Expect ')' after while condition."
+
+      body = statement
+
+      Statement::While.new(condition, body)
     end
 
     # Rule

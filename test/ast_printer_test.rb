@@ -36,6 +36,10 @@ class AstPrinterTest < Minitest::Test
 
       assert_equal string, @printer.print(literal)
     end
+
+    def visit_while(stmt)
+      "(while #{print(stmt.condition)} #{print(stmt.body)})"
+    end
   end
 
   def test_logical_expression
@@ -155,5 +159,25 @@ class AstPrinterTest < Minitest::Test
     )
 
     assert_equal "(var foo = true)", @printer.print(var)
+  end
+
+  def test_while_statement
+    # while (foo > 0) print foo;
+    statement = GoldyLox::Statement::While.new(
+      GoldyLox::Expression::Binary.new(
+        GoldyLox::Expression::Variable.new(
+          GoldyLox::Token.new(:identifier, 1, "foo")
+        ),
+        GoldyLox::Token.new(:greater, 1, ">"),
+        GoldyLox::Expression::Literal.new(0)
+      ),
+      GoldyLox::Statement::Print.new(
+        GoldyLox::Expression::Variable.new(
+          GoldyLox::Token.new(:identifier, 1, "foo")
+        )
+      )
+    )
+
+    assert_equal "(while (> variable foo 0) (print variable foo))", @printer.print(statement)
   end
 end

@@ -36,6 +36,10 @@ module GoldyLox
       attrs :expression
     end
 
+    class While < Statement # :nodoc:
+      attrs :condition, :body
+    end
+
     class Var < Statement # :nodoc:
       attrs :name, :initializer
     end

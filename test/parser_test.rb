@@ -317,6 +317,47 @@ class ParserTest < Minitest::Test
     assert_raises(GoldyLox::Parser::ParseError) { parser(tokens[..-2]).parse }
   end
 
+  def test_while_statement
+    # missing opening parenthesis
+    tokens = [
+      [:while, 1, "while"],
+      [:true, 1, "true"],
+      [:right_paren, 1, ")"],
+      [:string, 1, "body"],
+      [:semicolon, 1, ";"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Missing ( after while.") { parser(tokens).parse }
+
+    # missing closing parenthesis
+    tokens = [
+      [:while, 1, "while"],
+      [:left_paren, 1, "("],
+      [:true, 1, "true"],
+      [:string, 1, "body"],
+      [:semicolon, 1, ";"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Missing ) after while condition.") { parser(tokens).parse }
+
+    # valid while statement
+    tokens = [
+      [:while, 1, "while"],
+      [:left_paren, 1, "("],
+      [:true, 1, "true"],
+      [:right_paren, 1, ")"],
+      [:string, 1, "body"],
+      [:semicolon, 1, ";"]
+    ]
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::While, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.condition
+    assert_kind_of GoldyLox::Statement::Expression, statements.first.body
+  end
+
   def test_invalid_assignment_target
     # 1 = 1
     assert_raises "Invalid assignment target" do

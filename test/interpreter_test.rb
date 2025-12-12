@@ -232,4 +232,16 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "no", @out.join.chomp
   end
+
+  def test_while_statement
+    # body isn't evaluated if condition is never true
+    interpret('while (false) print "yes";')
+
+    assert_empty @out
+
+    # happy path
+    interpret("var i = 0; while (i < 3) print (i = i + 1);")
+
+    assert_equal "1.0\n2.0\n3.0\n", @out.join
+  end
 end
