@@ -78,7 +78,7 @@ class EnvironmentTest < Minitest::Test
 
     inner.assign @foo_token, nil
 
-    assert_equal nil, inner.get(@foo_token)
+    assert_nil inner.get(@foo_token)
     assert_equal true, outer.get(@foo_token)
   end
 
