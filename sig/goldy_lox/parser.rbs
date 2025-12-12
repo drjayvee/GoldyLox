@@ -26,6 +26,8 @@ module GoldyLox
 
     def expression: () -> Expression
     def assignment: () -> Expression
+    def logical_or: () -> Expression
+    def logical_and: () -> Expression
     def equality: () -> Expression
     def comparison: () -> Expression
     def term: () -> Expression

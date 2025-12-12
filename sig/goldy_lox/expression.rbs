@@ -31,6 +31,14 @@ module GoldyLox
       def initialize: (Numeric | String | bool | nil value) -> void
     end
 
+    class Logical < Expression
+      attr_reader left: Expression
+      attr_reader operator: Token
+      attr_reader right: Expression
+
+      def initialize: (Expression left, Token operator, Expression right) -> void
+    end
+
     class Unary < Expression
       attr_reader operator: Token
       attr_reader right: Expression

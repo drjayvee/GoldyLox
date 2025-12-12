@@ -39,6 +39,27 @@ class InterpreterTest < Minitest::Test
     end
   end
 
+  def test_logical_expression_value
+    assert_equal 2, evaluate("1 and 2")
+    assert_nil evaluate("nil and 2")
+    assert_nil evaluate("1 and nil")
+    assert_equal false, evaluate("false and nil")
+
+    assert_equal 1, evaluate("1 or 2")
+    assert_equal 2, evaluate("nil or 2")
+    assert_equal 1, evaluate("1 or nil")
+    assert_nil evaluate("false or nil")
+  end
+
+  def test_logical_expressions_short_circuit_right
+    # Using assignment expressions allows us to detect whether the right is evaluated at all.
+    interpret "var foo = 1; false and (foo = 2); print foo;"
+    assert_equal "1.0", @out.join.chomp
+
+    interpret "var foo = 1; true or (foo = 2); print foo;"
+    assert_equal "1.0", @out.join.chomp
+  end
+
   def test_unary_minus
     assert_equal(-5, evaluate("-5"))
     assert_equal 5, evaluate("--5")

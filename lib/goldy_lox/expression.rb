@@ -47,6 +47,10 @@ module GoldyLox
       attrs :value
     end
 
+    class Logical < Expression # :nodoc:
+      attrs :left, :operator, :right
+    end
+
     class Unary < Expression # :nodoc:
       attrs :operator, :right
     end

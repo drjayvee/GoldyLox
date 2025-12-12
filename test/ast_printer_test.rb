@@ -38,6 +38,21 @@ class AstPrinterTest < Minitest::Test
     end
   end
 
+  def test_logical_expression
+    # 1 or 2 and 3
+    logical = GoldyLox::Expression::Logical.new(
+      GoldyLox::Expression::Literal.new(1),
+      GoldyLox::Token.new(:or, 1, "or"),
+      GoldyLox::Expression::Logical.new(
+        GoldyLox::Expression::Literal.new(2),
+        GoldyLox::Token.new(:and, 1, "and"),
+        GoldyLox::Expression::Literal.new(3)
+      )
+    )
+
+    assert_equal "(or 1 (and 2 3))", @printer.print(logical)
+  end
+
   def test_grouping_expression
     grouping = GoldyLox::Expression::Grouping.new(
       GoldyLox::Expression::Literal.new(123)

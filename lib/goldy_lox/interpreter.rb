@@ -112,6 +112,18 @@ module GoldyLox
       expr.expression.accept self
     end
 
+    def visit_logical(expr)
+      left_value = evaluate(expr.left)
+
+      if expr.operator.type == :or
+        return left_value if left_value
+      else # must be :and
+        return left_value unless left_value
+      end
+
+      evaluate(expr.right)
+    end
+
     def visit_literal(expr)
       expr.value
     end

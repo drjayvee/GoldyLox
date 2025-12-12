@@ -2,6 +2,7 @@
 
 module GoldyLox
   # See chapter 6
+  # TODO: move grammar, utility methods into modules
   class Parser
     class ParseError < RuntimeError # :nodoc:
       attr_reader :token
@@ -114,9 +115,9 @@ module GoldyLox
 
     # Rule
     #  assignment -> IDENTIFIER "=" assignment
-    #             | equality ;
+    #             | logic_or ;
     def assignment
-      expr = equality
+      expr = logical_or
 
       if match? :equal
         equals = previous
@@ -125,6 +126,34 @@ module GoldyLox
         error(equals, "Invalid assignment target") unless expr.is_a? Expression::Variable
 
         return Expression::Assignment.new(expr.name, value)
+      end
+
+      expr
+    end
+
+    # Rule
+    #  logic_or -> logic_and ( "or" expression )* ;
+    def logical_or
+      expr = logical_and
+
+      if match? :or
+        operator = previous
+        right = logical_and
+        expr = Expression::Logical.new(expr, operator, right)
+      end
+
+      expr
+    end
+
+    # Rule
+    #  logic_and -> equality ( "and" expression )* ;
+    def logical_and
+      expr = equality
+
+      if match? :and
+        operator = previous
+        right = equality
+        expr = Expression::Logical.new(expr, operator, right)
       end
 
       expr

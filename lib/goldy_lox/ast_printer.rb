@@ -49,6 +49,10 @@ module GoldyLox
       expr.value.to_s
     end
 
+    def visit_logical(expr)
+      parenthesize expr.operator.type, expr.left, expr.right
+    end
+
     def visit_grouping(expr)
       parenthesize "group", expr.expression
     end
@@ -65,7 +69,7 @@ module GoldyLox
 
     def parenthesize(name, *exprs)
       str = +"("
-      str << name
+      str << name.to_s
       exprs.each do
         str << " "
         str << it.accept(self)

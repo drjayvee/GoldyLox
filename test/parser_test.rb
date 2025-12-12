@@ -42,6 +42,42 @@ class ParserTest < Minitest::Test
     assert_equal "(== 1337 leet)", @printer.print(expr)
   end
 
+  def test_logical_and
+    expr = parse_expression [
+      [:number, 1, "1", 1],
+      [:and, 1, "and"],
+      [:number, 1, "2", 2]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Logical, expr
+  end
+
+  def test_logical_and_precedes_or
+    # 1 or 2 and 3;
+    expr = parse_expression [
+      [:number, 1, "1", 1],
+      [:or, 1, "or"],
+      [:number, 1, "2", 2],
+      [:and, 1, "and"],
+      [:number, 1, "3", 3]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Logical, expr
+
+    assert_kind_of GoldyLox::Expression::Literal, expr.left
+    assert_equal 1, expr.left.value
+    assert_equal :or, expr.operator.type
+    assert_kind_of GoldyLox::Expression::Logical, expr.right
+
+    logical_and = expr.right
+
+    assert_kind_of GoldyLox::Expression::Literal, logical_and.left
+    assert_equal 2, logical_and.left.value
+    assert_equal :and, logical_and.operator.type
+    assert_kind_of GoldyLox::Expression::Literal, logical_and.right
+    assert_equal 3, logical_and.right.value
+  end
+
   def test_term_sequence
     # 1 + 2 + 3
     expr = parse_expression [

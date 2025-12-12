@@ -5,6 +5,6 @@ module GoldyLox
 
     def print: (Statement | Expression) -> String
 
-    def parenthesize: (String, *Expression) -> String
+    def parenthesize: (_ToS, *Expression) -> String
   end
 end
