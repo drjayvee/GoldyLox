@@ -51,12 +51,15 @@ module GoldyLox
 
     # Rule
     #  statement -> expressionStatement
+    #            | forStatement
     #            | ifStatement
     #            | printStatement
     #            | whileStatement
     #            | block ;
     def statement
-      if match? :if
+      if match? :for
+        for_statement
+      elsif match? :if
         if_statement
       elsif match? :print
         print_statement
@@ -75,6 +78,43 @@ module GoldyLox
       expr = expression
       consume :semicolon, "Expect ';' after expression."
       Statement::Expression.new expr
+    end
+
+    # Rule
+    #  forStatement -> "for" "(" ( var_declaration | expression_statement | ";" )
+    #                  expression? ";"
+    #                  expression? ")"
+    #                  statement ;
+    def for_statement
+      consume :left_paren, "Expect '(' after for."
+
+      initializer = if match? :semicolon
+        nil
+      elsif match? :var
+        var_declaration
+      else
+        expression_statement
+      end
+      condition = match?(:semicolon) ? nil : expression
+      consume :semicolon, "Expect ';' after loop condition."
+      increment = match?(:semicolon) ? nil : expression
+      consume :right_paren, "Expect ')' after for loop condition."
+      body = statement
+
+      # Desugar to while statement.
+      if increment
+        body = Statement::Block.new([
+          body,
+          Statement::Expression.new(increment)
+        ])
+      end
+
+      condition ||= Expression::Literal.new(true)
+      body = Statement::While.new(condition, body)
+
+      body = Statement::Block.new([initializer, body]) if initializer
+
+      body
     end
 
     # Rule

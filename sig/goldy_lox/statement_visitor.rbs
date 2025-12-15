@@ -3,6 +3,7 @@ module GoldyLox
     def visit_block: (Statement::Block) -> R
     def visit_expression: (Statement::Expression) -> R
     def visit_if: (Statement::If) -> R
+    # TODO: visit_for
     def visit_print: (Statement::Print) -> R
     def visit_var: (Statement::Var) -> R
     def visit_while: (Statement::While) -> R

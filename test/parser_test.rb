@@ -358,6 +358,56 @@ class ParserTest < Minitest::Test
     assert_kind_of GoldyLox::Statement::Expression, statements.first.body
   end
 
+  def test_for_statement
+    # for (var i = 0; i < 10; i = i + 1) print i;
+    tokens = [
+      [:for, 1, "for"],
+      [:left_paren, 1, "("],
+      [:var, 1, "var"],
+      [:identifier, 1, "i"],
+      [:equal, 1, "="],
+      [:number, 1, "0", 0],
+      [:semicolon, 1, ";"],
+      [:identifier, 1, "i"],
+      [:less, 1, "<"],
+      [:number, 1, "10", 10],
+      [:semicolon, 1, ";"],
+      [:identifier, 1, "i"],
+      [:equal, 1, "="],
+      [:identifier, 1, "i"],
+      [:plus, 1, "+"],
+      [:number, 1, "1", 1],
+      [:right_paren, 1, ")"],
+      [:print, 1, "print"],
+      [:identifier, 1, "i"],
+      [:semicolon, 1, ";"]
+    ]
+
+    statements = parser(tokens).parse
+
+    # For loop should be desugared into a block containing:
+    # 1. The initializer (var i = 0)
+    # 2. A while loop with the condition and body
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Block, block = statements.first
+    assert_equal 2, block.statements.size
+
+    # First statement should be the initializer
+    assert_kind_of GoldyLox::Statement::Var, block.statements[0]
+    assert_equal "i", block.statements[0].name.lexeme
+
+    # Second statement should be the while loop
+    assert_kind_of GoldyLox::Statement::While, while_stmt = block.statements[1]
+    assert_kind_of GoldyLox::Expression::Binary, while_stmt.condition
+
+    # While body should be a block containing the original body and increment
+    assert_kind_of GoldyLox::Statement::Block, while_body = while_stmt.body
+    assert_equal 2, while_body.statements.size
+    assert_kind_of GoldyLox::Statement::Print, while_body.statements[0]
+    assert_kind_of GoldyLox::Statement::Expression, while_body.statements[1]
+    assert_kind_of GoldyLox::Expression::Assignment, while_body.statements[1].expression
+  end
+
   def test_invalid_assignment_target
     # 1 = 1
     assert_raises "Invalid assignment target" do
