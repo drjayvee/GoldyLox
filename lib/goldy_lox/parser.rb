@@ -256,7 +256,7 @@ module GoldyLox
     end
 
     # Rule
-    #  unary ( ( "/" | "*" ) unary )* ;
+    #  factor -> unary ( ( "/" | "*" ) unary )* ;
     def factor
       expr = unary
 
@@ -271,7 +271,7 @@ module GoldyLox
 
     # Rule
     #  unary -> ( "!" | "-" ) unary
-    #        | unary
+    #        | primary ;
     def unary
       if match?(:bang, :minus)
         operator = previous
