@@ -246,7 +246,7 @@ module GoldyLox
 
       # Rule
       #  unary -> ( "!" | "-" ) unary
-      #        | primary ;
+      #        | call ;
       def unary
         if match?(:bang, :minus)
           operator = previous
@@ -254,7 +254,38 @@ module GoldyLox
           return Expression::Unary.new operator, right
         end
 
-        primary
+        call
+      end
+
+      # Rule
+      #  call -> primary ( "(" arguments? ")" )* ;
+      #
+      #  arguments -> expression ( "," expression )* ;
+      def call
+        expr = primary
+
+        loop do
+          break unless match? :left_paren
+
+          expr = finish_call expr
+        end
+
+        expr
+      end
+
+      def finish_call(expr)
+        arguments = []
+
+        unless check? :right_paren
+          loop do
+            arguments << expression
+            break unless match?(:comma)
+          end
+        end
+
+        paren = consume(:right_paren, "Expect ')' after arguments")
+
+        Expression::Call.new(expr, paren, arguments)
       end
 
       # Rule

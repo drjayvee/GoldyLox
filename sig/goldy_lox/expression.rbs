@@ -19,6 +19,14 @@ module GoldyLox
       def initialize: (Expression left, Token operator, Expression right) -> void
     end
 
+    class Call < Expression
+      attr_reader callee: Expression
+      attr_reader paren: Token
+      attr_reader arguments: Array[Expression]
+
+      def initialize: (Expression callee, Token paren, Array[Expression] arguments) -> void
+    end
+
     class Grouping < Expression
       attr_reader expression: Expression
 

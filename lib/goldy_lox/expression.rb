@@ -39,6 +39,10 @@ module GoldyLox
       attrs :left, :operator, :right
     end
 
+    class Call < Expression # :nodoc:
+      attrs :callee, :paren, :arguments
+    end
+
     class Grouping < Expression # :nodoc:
       attrs :expression
     end

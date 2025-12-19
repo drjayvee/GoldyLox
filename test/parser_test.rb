@@ -147,6 +147,93 @@ class ParserTest < Minitest::Test
     assert_equal "(- (- 1))", @printer.print(expr)
   end
 
+  def test_call_without_arguments
+    # fun()
+    expr = parse_expression [
+      [:identifier, 1, "fun"],
+      [:left_paren, 1, "("],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+    assert_kind_of GoldyLox::Expression::Variable, expr.callee
+    assert_equal "fun", expr.callee.name.lexeme
+    assert_empty expr.arguments
+  end
+
+  def test_call_with_arguments
+    # fun(1, 2)
+    expr = parse_expression [
+      [:identifier, 1, "fun"],
+      [:left_paren, 1, "("],
+      [:number, 1, "1", 1],
+      [:comma, 1, ","],
+      [:number, 1, "2", 2],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+    assert_kind_of GoldyLox::Expression::Variable, expr.callee
+    assert_equal "fun", expr.callee.name.lexeme
+    assert_equal 2, expr.arguments.size
+
+    assert_kind_of GoldyLox::Expression::Literal, expr.arguments[0]
+    assert_equal 1, expr.arguments[0].value
+    assert_kind_of GoldyLox::Expression::Literal, expr.arguments[1]
+    assert_equal 2, expr.arguments[1].value
+  end
+
+  def test_nested_call
+    # fun(nuf())
+    expr = parse_expression [
+      [:identifier, 1, "fun"],
+      [:left_paren, 1, "("],
+      [:identifier, 1, "nuf"],
+      [:left_paren, 1, "("],
+      [:right_paren, 1, ")"],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+    assert_kind_of GoldyLox::Expression::Variable, expr.callee
+    assert_equal "fun", expr.callee.name.lexeme
+    assert_equal 1, expr.arguments.size
+
+    assert_kind_of GoldyLox::Expression::Call, expr.arguments[0]
+    assert_kind_of GoldyLox::Expression::Variable, expr.arguments[0].callee
+    assert_equal "nuf", expr.arguments[0].callee.name.lexeme
+    assert_empty expr.arguments[0].arguments
+
+  end
+
+  def test_successive_calls
+    # getCallBack()()
+    expr = parse_expression [
+      [:identifier, 1, "getCallBack"],
+      [:left_paren, 1, "("],
+      [:right_paren, 1, ")"],
+      [:left_paren, 1, "("],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+    assert_kind_of GoldyLox::Expression::Call, expr.callee
+    assert_kind_of GoldyLox::Expression::Variable, expr.callee.callee
+    assert_equal "getCallBack", expr.callee.callee.name.lexeme
+    assert_empty expr.callee.arguments
+    assert_empty expr.arguments
+  end
+
+  def test_call_missing_right_paren
+    # fun(
+    assert_raises GoldyLox::Parser::ParseError, "Expect ')' after arguments." do
+      parse_expression [
+        [:identifier, 1, "fun"],
+        [:left_paren, 1, "("]
+      ]
+    end
+  end
+
   def test_grouping_precedes_factor
     # (1 + 2) * 3
     expr = parse_expression [

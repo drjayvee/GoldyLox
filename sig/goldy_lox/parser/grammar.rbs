@@ -20,6 +20,9 @@ module GoldyLox
       def term: -> Expression
       def factor: -> Expression
       def unary: -> Expression
+      def call: -> Expression
+      def finish_call: (Expression) -> untyped
+      def arguments: -> Expression
       def primary: -> Expression
     end
   end
