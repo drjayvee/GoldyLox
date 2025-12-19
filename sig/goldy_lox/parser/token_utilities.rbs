@@ -1,0 +1,13 @@
+module GoldyLox
+  class Parser
+    module TokenUtilities
+      def end?: -> bool
+      def match?: (Symbol, *Symbol) -> bool
+      def consume: (Symbol, String) -> void
+      def advance: -> Token
+      def check?: (Symbol) -> bool
+      def peek: -> Token
+      def previous: -> Token
+    end
+  end
+end

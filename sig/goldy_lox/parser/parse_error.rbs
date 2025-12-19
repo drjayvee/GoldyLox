@@ -1,0 +1,9 @@
+module GoldyLox
+  class Parser
+    class ParseError < StandardError
+      attr_reader token: Token
+
+      def initialize: (String, Token) -> void
+    end
+  end
+end

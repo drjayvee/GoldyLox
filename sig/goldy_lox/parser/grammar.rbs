@@ -1,0 +1,26 @@
+module GoldyLox
+  class Parser
+    module Grammar
+      def declaration: -> Statement
+      def var_declaration: -> Statement
+      def statement: -> Statement
+      def expression_statement: -> Statement
+      def for_statement: -> Statement
+      def if_statement: -> Statement
+      def print_statement: -> Statement
+      def while_statement: -> Statement
+      def block: -> Array[Statement]
+
+      def expression: -> Expression
+      def assignment: -> Expression
+      def logical_or: -> Expression
+      def logical_and: -> Expression
+      def equality: -> Expression
+      def comparison: -> Expression
+      def term: -> Expression
+      def factor: -> Expression
+      def unary: -> Expression
+      def primary: -> Expression
+    end
+  end
+end
