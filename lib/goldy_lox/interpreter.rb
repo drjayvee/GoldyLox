@@ -130,10 +130,10 @@ module GoldyLox
     end
 
     def visit_call(expr)
-      callee = evaluate expr.callee # callee.is_a? Statement::Function (not GoldyLox::Function)
+      callee = evaluate expr.callee # callee implements _Callable
       arguments = expr.arguments.map { evaluate it }
 
-      raise "Can only call functions and classes." unless callee.respond_to? :call
+      raise "Can only call functions and classes." unless callee.respond_to?(:arity) && callee.respond_to?(:call)
 
       if (arguments_count = arguments.size) != (arity = callee.arity)
         raise "Expected #{arguments_count} arguments but got #{arity}."
