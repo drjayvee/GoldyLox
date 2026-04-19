@@ -4,14 +4,46 @@ module GoldyLox
   class Parser
     module Grammar # :nodoc:
       # Rule
-      #  declaration -> variableDeclaration
+      #  declaration -> functionDeclaration
+      #              | variableDeclaration
       #              | statement ;
       def declaration
-        if match? :var
+        if match? :fun
+          function :function
+        elsif match? :var
           var_declaration
         else
           statement
         end
+      end
+
+      # Rule
+      #
+      # functionDeclaration -> "fun" function ;
+      #
+      # function -> IDENTIFIER "(" parameters? ")" ;
+      #
+      # parameters -> IDENTIFIER ( "," IDENTIFIER )* ;
+      def function(kind)
+        name = consume :identifier, "Expect #{kind} name."
+
+        consume :left_paren, "Expect '(' after #{kind} name."
+
+        parameters = []
+        unless check? :right_paren
+          loop do
+            error(peek, "Can't have more than 255 parameters") if parameters.length >= 255
+
+            parameters << consume(:identifier, "Expected parameter name.")
+            break unless match? :comma
+          end
+        end
+
+        consume :right_paren, "Expect ')' after parameters."
+
+        consume :left_brace, "Expect '{' before #{kind} body."
+
+        Statement::Function.new(name, parameters, block)
       end
 
       # Rule

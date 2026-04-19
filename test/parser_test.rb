@@ -395,6 +395,49 @@ class ParserTest < Minitest::Test
     end
   end
 
+  def test_fun_statement
+    # print_sum(foo, bar) { print foo + bar; }
+    tokens = [
+      [:fun, 1, "fun"],
+      [:identifier, 1, "print_sum"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Expect '(' after function name.") { parser(tokens).parse }
+
+    tokens += [
+      [:left_paren, 1, "("],
+      [:identifier, 1, "foo"],
+      [:comma, 1, ","],
+      [:identifier, 1, "bar"],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Expect '{' before function body.") { parser(tokens).parse }
+
+    tokens += [
+      [:left_brace, 1, "{"],
+      [:print, 2, "print"],
+      [:identifier, 2, "foo"],
+      [:plus, 2, "+"],
+      [:identifier, 2, "bar"],
+      [:semicolon, 2, ";"],
+      [:right_brace, 3, "}"]
+    ]
+
+    statements = parser(tokens).parse
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Function, statements.first
+
+    function = statements.first
+
+    assert_equal "print_sum", function.name.lexeme
+
+    assert_equal %w[foo bar], function.parameters.map(&:lexeme)
+
+    assert_equal 1, function.body.size
+    assert_kind_of GoldyLox::Statement::Print, function.body.first
+  end
+
   def test_var_statement
     tokens = [
       [:var, 1, "var"],

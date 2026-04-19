@@ -16,6 +16,14 @@ module GoldyLox
       def initialize: (GoldyLox::Expression expression) -> void
     end
 
+    class Function < Statement
+      attr_reader name: Token
+      attr_reader parameters: Array[Token]
+      attr_reader body: Array[Statement]
+
+      def initialize: (Token name, Array[Token] parameters, Array[Statement] body) -> void
+    end
+
     class If < Statement
       attr_reader condition: GoldyLox::Expression
       attr_reader then_branch: Statement

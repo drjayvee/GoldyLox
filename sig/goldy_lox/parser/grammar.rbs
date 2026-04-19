@@ -2,6 +2,7 @@ module GoldyLox
   class Parser
     module Grammar
       def declaration: -> Statement
+      def function: (:function kind) -> Statement::Function
       def var_declaration: -> Statement
       def statement: -> Statement
       def expression_statement: -> Statement

@@ -44,6 +44,10 @@ module GoldyLox
       stmt.expression.accept self
     end
 
+    def visit_function(stmt)
+      raise NotImplementedError
+    end
+
     def visit_if(stmt)
       if evaluate(stmt.condition) # if the condition is truthy (Lox and Ruby agree on truthiness)
         stmt.then_branch.accept self

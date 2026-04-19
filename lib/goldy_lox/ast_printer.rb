@@ -17,6 +17,14 @@ module GoldyLox
       parenthesize "expr", stmt.expression
     end
 
+    def visit_function(stmt)
+      str = +"fun #{stmt.name.lexeme}("
+      str << stmt.parameters.map(&:lexeme).join(", ")
+      str << ") { "
+      stmt.body.each { str << it.accept(self) }
+      str << " }"
+    end
+
     def visit_if(stmt)
       str = +"(if #{print(stmt.condition)} #{print(stmt.then_branch)}"
       str << " #{print(stmt.else_branch)}" unless stmt.else_branch.nil?
