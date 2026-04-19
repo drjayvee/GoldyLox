@@ -36,10 +36,6 @@ class AstPrinterTest < Minitest::Test
 
       assert_equal string, @printer.print(literal)
     end
-
-    def visit_while(stmt)
-      "(while #{print(stmt.condition)} #{print(stmt.body)})"
-    end
   end
 
   def test_logical_expression
