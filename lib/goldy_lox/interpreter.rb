@@ -30,6 +30,14 @@ module GoldyLox
       statement.accept self
     end
 
+    def execute_block(block, environment)
+      previous_environment = @environment
+      @environment = environment
+      interpret block.statements
+    ensure
+      @environment = previous_environment
+    end
+
     def evaluate(expr)
       expr.accept self
     end
@@ -37,7 +45,7 @@ module GoldyLox
     # region _StatementVisitor
 
     def visit_block(stmt)
-      execute_block stmt.statements, Environment.new(@environment)
+      execute_block stmt, Environment.new(@environment)
     end
 
     def visit_expression(stmt)
@@ -122,7 +130,7 @@ module GoldyLox
     end
 
     def visit_call(expr)
-      callee = evaluate expr.callee
+      callee = evaluate expr.callee # callee.is_a? Statement::Function (not GoldyLox::Function)
       arguments = expr.arguments.map { evaluate it }
 
       raise "Can only call functions and classes." unless callee.respond_to? :call
@@ -174,14 +182,6 @@ module GoldyLox
     # endregion
 
     private
-
-    def execute_block(statements, environment)
-      previous_environment = @environment
-      @environment = environment
-      interpret statements
-    ensure
-      @environment = previous_environment
-    end
 
     def assert_numeric_operands(operator, *operands)
       operands.each do |operand|
