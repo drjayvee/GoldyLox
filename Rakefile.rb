@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require "rake/testtask"
+require "rubocop/rake_task"
+
+RuboCop::RakeTask.new
 
 # Default task - run tests with RBS runtime checking
 task default: :test
@@ -25,5 +28,5 @@ task :rbs_validate do
   sh "rbs -I sig validate"
 end
 
-desc "Run all checks (RBS validation + tests with RBS)"
-task ci: %i[rbs_validate test]
+desc "Run all checks (RuboCop, RBS validation, tests with RBS)"
+task ci: %i[rubocop rbs_validate test]
