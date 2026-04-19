@@ -30,6 +30,19 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(+ 13 37)", @printer.print(expr)
   end
 
+  def test_call_expression
+    # clock()
+    call = GoldyLox::Expression::Call.new(
+      GoldyLox::Expression::Variable.new(
+        GoldyLox::Token.new(:identifier, 1, "clock")
+      ),
+      GoldyLox::Token.new(:left_paren, 1, "("),
+      []
+    )
+
+    assert_equal "(call variable clock)", @printer.print(call)
+  end
+
   def test_literal_expression
     { "hi" => "hi", true => "true", false => "false", nil => "nil" }.each do |value, string|
       literal = GoldyLox::Expression::Literal.new value

@@ -244,4 +244,28 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "1.0\n2.0\n3.0\n", @out.join
   end
+
+  def test_call_invalid_callee
+    assert_raises RuntimeError, "Can only call functions and classes." do
+      evaluate '"call me maybe"()'
+    end
+
+    assert_raises RuntimeError, "Can only call functions and classes." do
+      evaluate '"clock"()'
+    end
+  end
+
+  def test_call_arity
+    assert_raises RuntimeError, "Expect 0 arguments but got 1" do
+      evaluate "clock(true)"
+    end
+
+    # TODO: add more cases once we (fully) support functions
+  end
+
+  def test_clock
+    Time.freeze do
+      assert_equal Time.now.to_f, evaluate("clock()")
+    end
+  end
 end

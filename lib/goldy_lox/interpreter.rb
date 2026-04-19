@@ -14,7 +14,12 @@ module GoldyLox
 
     def initialize(out = $stdout)
       @out = out
-      @environment = Environment.new
+      @globals = @environment = Environment.new
+
+      @globals.define(
+        "clock",
+        Function.new(0) { Time.now.to_f }
+      )
     end
 
     def interpret(statements)
@@ -110,6 +115,19 @@ module GoldyLox
       else
         raise "Invalid operator"
       end
+    end
+
+    def visit_call(expr)
+      callee = evaluate expr.callee
+      arguments = expr.arguments.map { evaluate it }
+
+      raise "Can only call functions and classes." unless callee.respond_to? :call
+
+      if (arguments_count = arguments.size) != (arity = callee.arity)
+        raise "Expected #{arguments_count} arguments but got #{arity}."
+      end
+
+      callee.call(self, arguments)
     end
 
     def visit_grouping(expr)

@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+module GoldyLox
+  class Function
+    include _Callable
+
+    @block: Proc
+
+    def initialize: (Integer arity) { () -> untyped } -> void
+  end
+end

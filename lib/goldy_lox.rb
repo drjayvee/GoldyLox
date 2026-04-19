@@ -3,6 +3,7 @@
 require_relative "goldy_lox/ast_printer"
 require_relative "goldy_lox/environment"
 require_relative "goldy_lox/expression"
+require_relative "goldy_lox/function"
 require_relative "goldy_lox/interpreter"
 require_relative "goldy_lox/parser"
 require_relative "goldy_lox/runner"

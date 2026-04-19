@@ -47,6 +47,10 @@ module GoldyLox
       parenthesize expr.operator.lexeme, expr.left, expr.right
     end
 
+    def visit_call(expr)
+      parenthesize "call", expr.callee, *expr.arguments
+    end
+
     def visit_literal(expr)
       return "nil" if expr.value.nil?
 

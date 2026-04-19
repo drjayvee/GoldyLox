@@ -1,0 +1,6 @@
+module GoldyLox
+  interface _Callable
+    def arity: () -> Integer
+    def call: (Interpreter, Array[Object] arguments) -> void
+  end
+end
