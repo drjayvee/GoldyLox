@@ -183,6 +183,28 @@ class ParserTest < Minitest::Test
     assert_equal 2, expr.arguments[1].value
   end
 
+  def test_argument_limits
+    # fun(1, 1, ...)
+    parse_call_expression = lambda do |arg_count|
+      parse_expression [
+        [:identifier, 1, "fun"],
+        [:left_paren, 1, "("],
+        *([
+          [:number, 1, "1", 1],
+          [:comma, 1, ","]
+        ] * (arg_count - 1)),
+        [:number, 1, "1", 1],
+        [:right_paren, 1, ")"]
+      ]
+    end
+
+    assert parse_call_expression.call(255)
+
+    assert_raises GoldyLox::Parser::ParseError, "Can't have more than 255 arguments." do
+      parse_call_expression.call(256)
+    end
+  end
+
   def test_nested_call
     # fun(nuf())
     expr = parse_expression [

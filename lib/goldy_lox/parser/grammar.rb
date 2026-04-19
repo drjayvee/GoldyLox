@@ -278,6 +278,8 @@ module GoldyLox
 
         unless check? :right_paren
           loop do
+            error(peek, "Can't have more than 255 arguments.") if arguments.length >= 255
+
             arguments << expression
             break unless match?(:comma)
           end
