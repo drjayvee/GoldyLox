@@ -268,4 +268,31 @@ class InterpreterTest < Minitest::Test
       assert_equal Time.now.to_f, evaluate("clock()")
     end
   end
+
+  def test_function_call
+    # without params
+    interpret <<~LOX
+      fun print_sum1() { print 1337; }
+      print_sum1();
+    LOX
+
+    assert_equal "1337.0", @out.join.chomp
+
+    # with params
+    interpret <<~LOX
+      fun print_sum2(foo, bar) { print foo + bar; }
+      print_sum2(1300, 37);
+    LOX
+
+    assert_equal "1337.0", @out.join.chomp
+
+    # with block scope + param
+    interpret <<~LOX
+      var foo = 1300;
+      fun print_sum3(bar) { print foo + bar; }
+      print_sum3(37);
+    LOX
+
+    assert_equal "1337.0", @out.join.chomp
+  end
 end

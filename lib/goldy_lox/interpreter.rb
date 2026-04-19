@@ -18,7 +18,7 @@ module GoldyLox
 
       @globals.define(
         "clock",
-        Function.new(0) { Time.now.to_f }
+        NativeFunction.new(0) { Time.now.to_f }
       )
     end
 
@@ -53,7 +53,10 @@ module GoldyLox
     end
 
     def visit_function(stmt)
-      raise NotImplementedError
+      @environment.define(
+        stmt.name.lexeme,
+        LoxFunction.new(stmt, @environment)
+      )
     end
 
     def visit_if(stmt)

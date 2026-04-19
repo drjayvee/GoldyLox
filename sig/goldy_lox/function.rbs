@@ -1,9 +1,20 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Function
+  class LoxFunction
     include _Callable
 
+    @declaration: Statement::Function
+    @closure: Environment
+    @block: Proc
+
+    def initialize: (Statement::Function declaration, Environment closure) -> void
+  end
+
+  class NativeFunction
+    include _Callable
+
+    @arity: Integer
     @block: Proc
 
     def initialize: (Integer arity) { () -> untyped } -> void
