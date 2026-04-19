@@ -21,7 +21,7 @@ module GoldyLox
       str = +"fun #{stmt.name.lexeme}("
       str << stmt.parameters.map(&:lexeme).join(", ")
       str << ") { "
-      stmt.body.each { str << it.accept(self) }
+      stmt.body.statements.each { str << it.accept(self) }
       str << " }"
     end
 

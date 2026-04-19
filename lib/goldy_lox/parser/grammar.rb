@@ -72,7 +72,7 @@ module GoldyLox
         elsif match? :while
           while_statement
         elsif match? :left_brace
-          Statement::Block.new block
+          block
         else
           expression_statement
         end
@@ -165,7 +165,7 @@ module GoldyLox
 
         consume :right_brace, "Expect '}' after block."
 
-        statements
+        Statement::Block.new statements
       end
 
       # Rule

@@ -434,8 +434,8 @@ class ParserTest < Minitest::Test
 
     assert_equal %w[foo bar], function.parameters.map(&:lexeme)
 
-    assert_equal 1, function.body.size
-    assert_kind_of GoldyLox::Statement::Print, function.body.first
+    assert_equal 1, function.body.statements.size
+    assert_kind_of GoldyLox::Statement::Print, function.body.statements.first
   end
 
   def test_var_statement

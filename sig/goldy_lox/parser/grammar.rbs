@@ -10,7 +10,7 @@ module GoldyLox
       def if_statement: -> Statement
       def print_statement: -> Statement
       def while_statement: -> Statement
-      def block: -> Array[Statement]
+      def block: -> Statement::Block
 
       def expression: -> Expression
       def assignment: -> Expression

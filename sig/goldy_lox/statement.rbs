@@ -19,9 +19,9 @@ module GoldyLox
     class Function < Statement
       attr_reader name: Token
       attr_reader parameters: Array[Token]
-      attr_reader body: Array[Statement]
+      attr_reader body: Block
 
-      def initialize: (Token name, Array[Token] parameters, Array[Statement] body) -> void
+      def initialize: (Token name, Array[Token] parameters, Block body) -> void
     end
 
     class If < Statement

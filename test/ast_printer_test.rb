@@ -106,17 +106,19 @@ class AstPrinterTest < Minitest::Test
         GoldyLox::Token.new(:identifier, 1, "foo"),
         GoldyLox::Token.new(:identifier, 1, "bar")
       ],
-      [GoldyLox::Statement::Print.new(
-        GoldyLox::Expression::Binary.new(
-          GoldyLox::Expression::Variable.new(
-            GoldyLox::Token.new(:identifier, 1, "foo")
-          ),
-          GoldyLox::Token.new(:plus, 1, "+"),
-          GoldyLox::Expression::Variable.new(
-            GoldyLox::Token.new(:identifier, 1, "bar")
+      GoldyLox::Statement::Block.new([
+        GoldyLox::Statement::Print.new(
+          GoldyLox::Expression::Binary.new(
+            GoldyLox::Expression::Variable.new(
+              GoldyLox::Token.new(:identifier, 1, "foo")
+            ),
+            GoldyLox::Token.new(:plus, 1, "+"),
+            GoldyLox::Expression::Variable.new(
+              GoldyLox::Token.new(:identifier, 1, "bar")
+            )
           )
         )
-      )]
+      ])
     )
 
     assert_equal "fun print_sum(foo, bar) { (print (+ variable foo variable bar)) }", @printer.print(statement)
