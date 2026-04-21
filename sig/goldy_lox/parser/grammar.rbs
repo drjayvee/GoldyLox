@@ -6,10 +6,10 @@ module GoldyLox
       def var_declaration: -> Statement
       def statement: -> Statement
       def expression_statement: -> Statement
-      def for_statement: -> Statement
-      def if_statement: -> Statement
-      def print_statement: -> Statement
-      def while_statement: -> Statement
+      def for_statement: -> (Statement::While | Statement::Block)
+      def if_statement: -> Statement::If
+      def print_statement: -> Statement::Print
+      def while_statement: -> Statement::While
       def block: -> Statement::Block
 
       def expression: -> Expression
