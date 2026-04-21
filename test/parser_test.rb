@@ -468,6 +468,34 @@ class ParserTest < Minitest::Test
     assert_raises(GoldyLox::Parser::ParseError) { parser(tokens[..-2]).parse }
   end
 
+  def test_return_statement
+    # return
+    tokens = [
+      [:return, 1, "return"]
+      # missing semicolon
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, 'Expecting ";" after return.') { parser(tokens).parse }
+
+    # return;
+    tokens << [:semicolon, 1, ";"]
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Return, statements.first
+    assert_nil statements.first.expression
+
+    # return true;
+    tokens.insert(1, [:true, 1, "true"])
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Return, statements.first
+    assert_kind_of GoldyLox::Expression::Literal, statements.first.expression
+  end
+
   def test_while_statement
     # missing opening parenthesis
     tokens = [

@@ -35,6 +35,12 @@ module GoldyLox
       parenthesize "print", stmt.expression
     end
 
+    def visit_return(stmt)
+      str = +"(return"
+      str << " #{stmt.expression.accept(self)}" if stmt.expression
+      str << ")"
+    end
+
     def visit_var(stmt)
       str = +"(var #{stmt.name.lexeme}"
       str << " = #{stmt.initializer.accept(self)}" unless stmt.initializer.nil?

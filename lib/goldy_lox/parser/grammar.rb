@@ -60,6 +60,7 @@ module GoldyLox
       #            | forStatement
       #            | ifStatement
       #            | printStatement
+      #            | returnStatement
       #            | whileStatement
       #            | block ;
       def statement
@@ -69,6 +70,8 @@ module GoldyLox
           if_statement
         elsif match? :print
           print_statement
+        elsif match? :return
+          return_statement
         elsif match? :while
           while_statement
         elsif match? :left_brace
@@ -143,6 +146,18 @@ module GoldyLox
         expr = expression
         consume :semicolon, "Expect ';' after expression."
         Statement::Print.new expr
+      end
+
+      # Rule
+      #  returnStatement -> "return" expression? ";" ;
+      def return_statement
+        keyword = previous
+
+        value = check?(:semicolon) ? nil : expression
+
+        consume :semicolon, "Expect ';' after return."
+
+        Statement::Return.new(keyword, value)
       end
 
       # Rule

@@ -164,6 +164,22 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(print 123)", @printer.print(statement)
   end
 
+  def test_return_statement
+    statement = GoldyLox::Statement::Return.new(
+      GoldyLox::Token.new(:return, 1, "return"),
+      nil
+    )
+
+    assert_equal "(return)", @printer.print(statement)
+
+    statement = GoldyLox::Statement::Return.new(
+      GoldyLox::Token.new(:return, 1, "return"),
+      GoldyLox::Expression::Literal.new(123)
+    )
+
+    assert_equal "(return 123)", @printer.print(statement)
+  end
+
   def test_block_statement
     statement = GoldyLox::Statement::Block.new [
       GoldyLox::Statement::Expression.new(

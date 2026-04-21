@@ -40,6 +40,10 @@ module GoldyLox
       attrs :expression
     end
 
+    class Return < Statement # :nodoc:
+      attrs :keyword, :expression
+    end
+
     class While < Statement # :nodoc:
       attrs :condition, :body
     end

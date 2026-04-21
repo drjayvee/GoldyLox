@@ -71,6 +71,10 @@ module GoldyLox
       @out << "#{stmt.expression.accept(self)}\n"
     end
 
+    def visit_return(stmt)
+      raise NotImplementedError
+    end
+
     def visit_var(stmt)
       value = if stmt.initializer.nil?
         nil

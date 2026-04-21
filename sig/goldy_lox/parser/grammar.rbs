@@ -9,6 +9,7 @@ module GoldyLox
       def for_statement: -> (Statement::While | Statement::Block)
       def if_statement: -> Statement::If
       def print_statement: -> Statement::Print
+      def return_statement: -> Statement::Return
       def while_statement: -> Statement::While
       def block: -> Statement::Block
 

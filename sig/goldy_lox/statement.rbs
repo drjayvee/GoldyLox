@@ -38,6 +38,13 @@ module GoldyLox
       def initialize: (GoldyLox::Expression expression) -> void
     end
 
+    class Return < Statement
+      attr_reader keyword: Token
+      attr_reader expression: GoldyLox::Expression?
+
+      def initialize: (Token keyword, GoldyLox::Expression? expression) -> void
+    end
+
     class While < Statement
       attr_reader condition: GoldyLox::Expression
       attr_reader body: Statement
