@@ -336,4 +336,22 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "\nbar: baz\n", @out.join
   end
+
+  def test_local_function_closure
+    interpret <<~LOX
+      fun makeCounter() {
+        var i = 0;
+        fun count() {
+          i = i + 1;
+          print i;
+        }
+        return count;
+      }
+      var counter = makeCounter();
+      counter();
+      counter();
+    LOX
+
+    assert_equal "1.0\n2.0", @out.join.chomp
+  end
 end
