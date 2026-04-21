@@ -35,7 +35,7 @@ class InterpreterTest < Minitest::Test
 
   def test_literals
     [nil, true, false, 0, 1, "", "0", "hi"].each do |literal|
-      assert literal == evaluate(GoldyLox::Expression::Literal.new(literal))
+      assert literal == evaluate(GoldyLox::Expression::Literal.new(literal)) # rubocop:disable Minitest/AssertEqual
     end
   end
 
@@ -43,7 +43,7 @@ class InterpreterTest < Minitest::Test
     assert_equal 2, evaluate("1 and 2")
     assert_nil evaluate("nil and 2")
     assert_nil evaluate("1 and nil")
-    assert_equal false, evaluate("false and nil")
+    refute evaluate("false and nil")
 
     assert_equal 1, evaluate("1 or 2")
     assert_equal 2, evaluate("nil or 2")
@@ -73,15 +73,15 @@ class InterpreterTest < Minitest::Test
 
   def test_unary_bang
     %w[false nil].each do |operand|
-      assert_equal true, evaluate("!#{operand}")
+      assert_equal true, evaluate("!#{operand}") # rubocop:disable Minitest/AssertTruthy
     end
 
     %w[true 0 1 \"0\" \"1\"].each do |operand|
-      assert_equal false, evaluate("!#{operand}")
+      assert_equal false, evaluate("!#{operand}") # rubocop:disable Minitest/RefuteFalse
     end
 
-    assert_equal false, evaluate("!!false")
-    assert_equal true, evaluate("!!true")
+    assert_equal false, evaluate("!!false") # rubocop:disable Minitest/RefuteFalse
+    assert_equal true, evaluate("!!true") # rubocop:disable Minitest/AssertTruthy
   end
 
   def test_unary_with_invalid_operator
@@ -95,7 +95,7 @@ class InterpreterTest < Minitest::Test
 
   def test_grouping
     assert_equal 1, evaluate("(1)")
-    assert_equal true, evaluate("(true)")
+    assert_equal true, evaluate("(true)") # rubocop:disable Minitest/AssertTruthy
     assert_equal "yep", evaluate("(\"yep\")")
     assert_nil evaluate("((nil))")
   end

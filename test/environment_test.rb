@@ -36,7 +36,7 @@ class EnvironmentTest < Minitest::Test
     @environment.define @foo_name, true
     @environment.assign @foo_token, false
 
-    assert_equal false, @environment.get(@foo_token)
+    assert_equal false, @environment.get(@foo_token) # rubocop:disable Minitest/RefuteFalse
   end
 
   def test_get_nested_variable
@@ -45,7 +45,7 @@ class EnvironmentTest < Minitest::Test
 
     inner = GoldyLox::Environment.new outer
 
-    assert_equal true, inner.get(@foo_token)
+    assert_equal true, inner.get(@foo_token) # rubocop:disable Minitest/AssertTruthy
   end
 
   def test_get_shadowed_variable
@@ -55,7 +55,7 @@ class EnvironmentTest < Minitest::Test
     inner = GoldyLox::Environment.new outer
     inner.define @foo_name, false
 
-    assert_equal false, inner.get(@foo_token)
+    assert_equal false, inner.get(@foo_token) # rubocop:disable Minitest/RefuteFalse
   end
 
   def test_update_nested_variable
@@ -79,7 +79,7 @@ class EnvironmentTest < Minitest::Test
     inner.assign @foo_token, nil
 
     assert_nil inner.get(@foo_token)
-    assert_equal true, outer.get(@foo_token)
+    assert_equal true, outer.get(@foo_token) # rubocop:disable Minitest/AssertTruthy
   end
 
   def test_get_raises_if_not_declared
