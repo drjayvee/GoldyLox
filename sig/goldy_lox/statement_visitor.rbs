@@ -5,7 +5,7 @@ module GoldyLox
     def visit_function: (Statement::Function) -> R
     def visit_if: (Statement::If) -> R
     def visit_print: (Statement::Print) -> R
-    def visit_return: (Statement::Return) -> R
+    def visit_return: (Statement::Return) -> void # actually never returns
     def visit_var: (Statement::Var) -> R
     def visit_while: (Statement::While) -> R
   end

@@ -12,6 +12,15 @@ module GoldyLox
       end
     end
 
+    class Return < RuntimeError # :nodoc:
+      attr_reader :value
+
+      def initialize(value)
+        @value = value
+        super()
+      end
+    end
+
     def initialize(out = $stdout)
       @out = out
       @globals = @environment = Environment.new
@@ -72,7 +81,9 @@ module GoldyLox
     end
 
     def visit_return(stmt)
-      raise NotImplementedError
+      value = stmt.expression ? evaluate(stmt.expression) : nil
+
+      raise Return.new(value) # rubocop:disable Style/RaiseArgs
     end
 
     def visit_var(stmt)

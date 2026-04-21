@@ -18,6 +18,9 @@ module GoldyLox
       end
 
       interpreter.execute_block @declaration.body, env
+      nil
+    rescue Interpreter::Return => e
+      e.value
     end
   end
 

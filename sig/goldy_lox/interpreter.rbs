@@ -7,6 +7,12 @@ module GoldyLox
       def initialize: (Token operator, untyped value) -> void
     end
 
+    class Return < RuntimeError
+      attr_reader value: untyped
+
+      def initialize: (untyped value) -> void
+    end
+
     include _ExpressionVisitor[void]
     include _StatementVisitor[void]
 

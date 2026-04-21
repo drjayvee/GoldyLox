@@ -322,4 +322,18 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "foobarbaz", @out.join.chomp
   end
+
+  def test_return
+    interpret <<~LOX
+      var foo = "foo";
+      fun foo(bar) {
+         if (bar) return "bar: " + bar;
+         return;
+      }
+      print foo(nil);
+      print foo("baz");
+    LOX
+
+    assert_equal "\nbar: baz\n", @out.join
+  end
 end
