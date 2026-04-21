@@ -295,4 +295,31 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "1337.0", @out.join.chomp
   end
+
+  def test_recursive_function_call
+    interpret <<~LOX
+      fun count(n) {
+        if (n > 1) count(n - 1);
+        print n;
+      }
+      count(3);
+    LOX
+
+    assert_equal "1.0\n2.0\n3.0\n", @out.join
+  end
+
+  def test_nested_function
+    interpret <<~LOX
+      var foo = "foo";
+      fun outer(bar) {
+        fun inner(baz) {
+          print foo + bar + baz;
+        }
+        inner("baz");
+      }
+      outer("bar");
+    LOX
+
+    assert_equal "foobarbaz", @out.join.chomp
+  end
 end
