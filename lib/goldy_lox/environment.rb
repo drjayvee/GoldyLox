@@ -3,7 +3,7 @@
 module GoldyLox
   # see https://craftinginterpreters.com/statements-and-state.html#environments
   class Environment
-    class UndefinedVariableError < RuntimeError # :nodoc:
+    class UndefinedVariableError < RuntimeError
       def initialize(message, name)
         super(message)
         @name = name

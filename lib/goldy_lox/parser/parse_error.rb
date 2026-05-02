@@ -2,7 +2,7 @@
 
 module GoldyLox
   class Parser
-    class ParseError < RuntimeError # :nodoc:
+    class ParseError < RuntimeError
       attr_reader :token
 
       def initialize(message, token)

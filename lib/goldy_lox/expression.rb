@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Expression # :nodoc:
+  class Expression
     def accept(visitor)
       class_name = self.class.name.split("::").last
       visitor.send "visit_#{class_name.downcase}", self
@@ -31,35 +31,35 @@ module GoldyLox
       end
     end
 
-    class Assignment < Expression # :nodoc:
+    class Assignment < Expression
       attrs :name, :value
     end
 
-    class Binary < Expression # :nodoc:
+    class Binary < Expression
       attrs :left, :operator, :right
     end
 
-    class Call < Expression # :nodoc:
+    class Call < Expression
       attrs :callee, :paren, :arguments
     end
 
-    class Grouping < Expression # :nodoc:
+    class Grouping < Expression
       attrs :expression
     end
 
-    class Literal < Expression # :nodoc:
+    class Literal < Expression
       attrs :value
     end
 
-    class Logical < Expression # :nodoc:
+    class Logical < Expression
       attrs :left, :operator, :right
     end
 
-    class Unary < Expression # :nodoc:
+    class Unary < Expression
       attrs :operator, :right
     end
 
-    class Variable < Expression # :nodoc:
+    class Variable < Expression
       attrs :name
     end
   end

@@ -8,7 +8,6 @@ module GoldyLox
 
     KEYWORDS = %i[and class else false fun for if nil or print return super this true var while].freeze
 
-    # :nodoc:
     class LexicalError < StandardError
       attr_reader :line
 

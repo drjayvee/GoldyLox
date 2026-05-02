@@ -5,7 +5,7 @@ require_relative "parser/grammar"
 require_relative "parser/token_utilities"
 
 module GoldyLox
-  class Parser # :nodoc:
+  class Parser
     attr_reader :errors
 
     def initialize(tokens)

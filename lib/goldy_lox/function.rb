@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class LoxFunction # :nodoc:
+  class LoxFunction
     def initialize(declaration, closure)
       @declaration = declaration
       @closure = closure
@@ -24,7 +24,7 @@ module GoldyLox
     end
   end
 
-  class NativeFunction # :nodoc:
+  class NativeFunction
     attr_reader :arity
 
     def initialize(arity, &block)

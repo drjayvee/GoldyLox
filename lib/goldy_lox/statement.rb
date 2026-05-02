@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Statement # :nodoc:
+  class Statement
     def accept(visitor)
       class_name = self.class.name.split("::").last
       visitor.send "visit_#{class_name.downcase}", self
@@ -20,35 +20,35 @@ module GoldyLox
       end
     end
 
-    class Block < Statement # :nodoc:
+    class Block < Statement
       attrs :statements
     end
 
-    class Expression < Statement # :nodoc:
+    class Expression < Statement
       attrs :expression
     end
 
-    class Function < Statement # :nodoc:
+    class Function < Statement
       attrs :name, :parameters, :body
     end
 
-    class If < Statement # :nodoc:
+    class If < Statement
       attrs :condition, :then_branch, :else_branch
     end
 
-    class Print < Statement # :nodoc:
+    class Print < Statement
       attrs :expression
     end
 
-    class Return < Statement # :nodoc:
+    class Return < Statement
       attrs :keyword, :expression
     end
 
-    class While < Statement # :nodoc:
+    class While < Statement
       attrs :condition, :body
     end
 
-    class Var < Statement # :nodoc:
+    class Var < Statement
       attrs :name, :initializer
     end
   end

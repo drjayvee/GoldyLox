@@ -6,6 +6,9 @@ AllCops:
   TargetRubyVersion: 3.4
   NewCops: disable
 
+Style/Documentation:
+  Enabled: false
+
 # A couple of rules to make this more like Rails omakase
 Style/StringLiterals:
   Enabled: true

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Runner # :nodoc:
+  class Runner
     def initialize(out = $stdout, err = $stderr)
       @out = out
       @err = err

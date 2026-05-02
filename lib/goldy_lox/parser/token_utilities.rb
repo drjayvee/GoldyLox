@@ -2,7 +2,7 @@
 
 module GoldyLox
   class Parser
-    module TokenUtilities # :nodoc:
+    module TokenUtilities
       def end?
         @current == @tokens.size
       end

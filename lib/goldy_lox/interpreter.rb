@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  class Interpreter # :nodoc:
-    class InvalidOperandError < RuntimeError # :nodoc:
+  class Interpreter
+    class InvalidOperandError < RuntimeError
       attr_reader :operator, :value
 
       def initialize(operator, value)
@@ -12,7 +12,7 @@ module GoldyLox
       end
     end
 
-    class Return < RuntimeError # :nodoc:
+    class Return < RuntimeError
       attr_reader :value
 
       def initialize(value)

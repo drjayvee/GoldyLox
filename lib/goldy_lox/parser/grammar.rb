@@ -2,7 +2,7 @@
 
 module GoldyLox
   class Parser
-    module Grammar # :nodoc:
+    module Grammar
       # Rule
       #  declaration -> functionDeclaration
       #              | variableDeclaration
