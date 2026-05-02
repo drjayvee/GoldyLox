@@ -32,8 +32,9 @@ module GoldyLox
         @start = @current
         scan_token
       end
-
       add_token :eof
+
+      @tokens
     end
 
     private
