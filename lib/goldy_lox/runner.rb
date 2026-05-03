@@ -32,6 +32,10 @@ module GoldyLox
 
       statements.each { @err << "#{@printer.print(it)}\n" }
 
+      # resolve variables
+      resolver = Resolver.new @interpreter
+      resolver.resolve_all statements
+
       # execute statements
       begin
         if single_expression?(statements)

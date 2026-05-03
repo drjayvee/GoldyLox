@@ -24,6 +24,7 @@ module GoldyLox
     def initialize(out = $stdout)
       @out = out
       @globals = @environment = Environment.new
+      @locals = {}
 
       @globals.define(
         "clock",
@@ -41,7 +42,7 @@ module GoldyLox
 
     def execute_block(block, environment)
       previous_environment = @environment
-      @environment = environment
+      @environment = Environment.new environment
       interpret block.statements
     ensure
       @environment = previous_environment
@@ -49,6 +50,10 @@ module GoldyLox
 
     def evaluate(expr)
       expr.accept self
+    end
+
+    def resolve(expr, depth)
+      @locals[expr] = depth
     end
 
     # region _StatementVisitor
@@ -107,7 +112,11 @@ module GoldyLox
     def visit_assignment(expr)
       value = evaluate expr.value
 
-      @environment.assign expr.name, value
+      if (distance = @locals[expr])
+        @environment.assign_at distance, expr.name, value
+      else
+        @globals.assign expr.name, value
+      end
 
       value
     end
@@ -194,7 +203,7 @@ module GoldyLox
     end
 
     def visit_variable(expr)
-      @environment.get expr.name
+      lookup_variable expr.name, expr
     end
 
     # endregion
@@ -204,6 +213,14 @@ module GoldyLox
     def assert_numeric_operands(operator, *operands)
       operands.each do |operand|
         raise InvalidOperandError.new(operator, operand) unless operand.is_a?(Numeric)
+      end
+    end
+
+    def lookup_variable(name, expr)
+      if (distance = @locals[expr])
+        @environment.get_at distance, name.lexeme
+      else
+        @globals.get name
       end
     end
   end

@@ -30,6 +30,8 @@ class InterpreterTest < Minitest::Test
       GoldyLox::Scanner.new(lox).scan_tokens
     ).parse
 
+    GoldyLox::Resolver.new(@interpreter).resolve_all(statements)
+
     @interpreter.interpret statements
   end
 
@@ -336,5 +338,22 @@ class InterpreterTest < Minitest::Test
     LOX
 
     assert_equal "1.0\n2.0", @out.join.chomp
+  end
+
+  def test_closure_resolution
+    interpret <<~LOX
+      var a = "global";
+      {
+        fun showA() {
+          print a;
+        }
+
+        showA();
+        var a = "block";
+        showA();
+      }
+    LOX
+
+    assert_equal "global\nglobal", @out.join.chomp
   end
 end

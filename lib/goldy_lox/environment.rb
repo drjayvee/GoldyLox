@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 module GoldyLox
-  # see https://craftinginterpreters.com/statements-and-state.html#environments
   class Environment
+    protected attr_reader :enclosing, :values
+
     class UndefinedVariableError < RuntimeError
       def initialize(message, name)
         super(message)
@@ -29,6 +30,10 @@ module GoldyLox
       raise UndefinedVariableError.new("Undefined variable #{variable_name}", name)
     end
 
+    def get_at(distance, name)
+      ancestor(distance).values[name]
+    end
+
     def assign(name, value)
       variable_name = name.lexeme
 
@@ -43,6 +48,18 @@ module GoldyLox
       end
 
       raise UndefinedVariableError.new("Undefined variable #{variable_name}", name)
+    end
+
+    def assign_at(distance, name, value)
+      ancestor(distance).values[name.lexeme] = value
+    end
+
+    private
+
+    def ancestor(distance)
+      enclosing = self
+      distance.times { enclosing = enclosing.enclosing }
+      enclosing
     end
   end
 end

@@ -6,6 +6,9 @@ module GoldyLox
       def initialize: (String message, Token name) -> void
     end
 
+    private attr_reader enclosing: instance
+    private attr_reader values: Hash[String, untyped]
+
     @enclosing: instance?
     @values: Hash[String, untyped]
 
@@ -14,11 +17,13 @@ module GoldyLox
     def define: (String name, untyped value) -> void
 
     def get: (Token name) -> untyped
+    def get_at: (Integer distance, String name) -> untyped
 
     def assign: (Token name, untyped value) -> void
+    def assign_at: (Integer distance, Token name, untyped value) -> void
 
     private
 
-    def assert_defined: (Token name) -> void
+    def ancestor: (Integer distance) -> instance
   end
 end

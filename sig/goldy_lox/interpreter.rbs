@@ -15,10 +15,12 @@ module GoldyLox
 
     include _ExpressionVisitor[void]
     include _StatementVisitor[void]
+    include Resolver::_Resolvable
 
     @out: _Appendable
     @globals: Environment
     @environment: Environment
+    @locals: Hash[Expression, Integer]
 
     def initialize: (_Appendable) -> void
 
@@ -27,6 +29,10 @@ module GoldyLox
     def execute_block: (Statement::Block, Environment) -> void
     def evaluate: (Expression) -> untyped
 
+    private
+
     def assert_numeric_operands: (Token operator, *untyped operands) -> void
+
+    def lookup_variable: (Token name, Expression expr) -> untyped
   end
 end

@@ -1,0 +1,33 @@
+module GoldyLox
+  class Resolver
+    interface _Resolvable
+      def resolve: (Expression, Integer) -> void
+    end
+
+    class ResolutionError < RuntimeError
+    end
+
+    include _ExpressionVisitor[void]
+    include _StatementVisitor[void]
+
+    @interpreter: Interpreter
+    @scopes: Array[Hash[String, bool]]
+
+    def initialize: (_Resolvable) -> void
+
+    def resolve_all: (Array[Statement]) -> void
+
+    private
+
+    def begin_scope: -> void
+    def end_scope: -> void
+
+    def declare: (Token name) -> void
+    def define: (Token name) -> void
+
+    def resolve: (Expression | Statement) -> void
+
+    def resolve_local: (Expression expr, Token name) -> void
+    def resolve_function: (Statement::Function) -> void
+  end
+end
