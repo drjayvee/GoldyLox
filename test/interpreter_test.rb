@@ -185,30 +185,13 @@ class InterpreterTest < Minitest::Test
   end
 
   def test_block_scope
-    # foo = 13; { bar = 37; print foo + bar; }
-    @interpreter.interpret [
-      GoldyLox::Statement::Var.new(
-        GoldyLox::Token.new(:identifier, 1, "foo"),
-        GoldyLox::Expression::Literal.new("13")
-      ),
-      GoldyLox::Statement::Block.new([
-        GoldyLox::Statement::Var.new(
-          GoldyLox::Token.new(:identifier, 1, "bar"),
-          GoldyLox::Expression::Literal.new("37")
-        ),
-        GoldyLox::Statement::Print.new(
-          GoldyLox::Expression::Binary.new(
-            GoldyLox::Expression::Variable.new(
-              GoldyLox::Token.new(:identifier, 1, "foo")
-            ),
-            GoldyLox::Token.new(:plus, 1, "+"),
-            GoldyLox::Expression::Variable.new(
-              GoldyLox::Token.new(:identifier, 1, "bar")
-            )
-          )
-        )
-      ])
-    ]
+    interpret <<~LOX
+      var foo = "13";
+      {
+        var bar = "37";
+        print foo + bar;
+      }
+    LOX
 
     assert_equal "1337", @out.join.chomp
   end
