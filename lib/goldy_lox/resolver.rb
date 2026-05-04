@@ -2,11 +2,13 @@
 
 module GoldyLox
   class Resolver
+    class InvalidReturnError < RuntimeError; end
     class ResolutionError < RuntimeError; end
 
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
+      @current_function = :none
     end
 
     def resolve_all(stmts)
@@ -29,10 +31,15 @@ module GoldyLox
       declare stmt.name
       define stmt.name
 
+      current_function = @current_function
+      @current_function = :function
+
       begin_scope
       stmt.parameters.each { declare it; define it } # rubocop:disable Style/Semicolon
       resolve stmt.body # visit_block will create a new scope
       end_scope
+
+      @current_function = current_function
     end
 
     def visit_if(stmt)
@@ -46,6 +53,8 @@ module GoldyLox
     end
 
     def visit_return(stmt)
+      raise InvalidReturnError if @current_function != :function
+
       resolve stmt.expression if stmt.expression
     end
 

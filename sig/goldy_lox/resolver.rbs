@@ -12,6 +12,7 @@ module GoldyLox
 
     @interpreter: Interpreter
     @scopes: Array[Hash[String, bool]]
+    @current_function: :none | :function
 
     def initialize: (_Resolvable) -> void
 

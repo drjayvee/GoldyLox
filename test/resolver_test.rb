@@ -126,4 +126,12 @@ class ResolverTest < Minitest::Test
     assert_equal 0, @interpreter.depth_for("funk") # Call
     assert_equal 1, @interpreter.depth_for("bar")  # Print
   end
+
+  def test_detect_global_return
+    assert_raises GoldyLox::Resolver::InvalidReturnError do
+      resolve <<~LOX
+        return "at top level";
+      LOX
+    end
+  end
 end
