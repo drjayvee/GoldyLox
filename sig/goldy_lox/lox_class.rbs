@@ -1,0 +1,7 @@
+module GoldyLox
+  class LoxClass
+    attr_reader name: String
+
+    def initialize: (String name) -> void
+  end
+end

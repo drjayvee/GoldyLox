@@ -17,6 +17,11 @@ module GoldyLox
 
     # region _StatementVisitor
 
+    def visit_class(stmt)
+      declare stmt.name
+      define stmt.name
+    end
+
     def visit_block(stmt)
       begin_scope
       stmt.statements.each { resolve it }

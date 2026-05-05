@@ -58,6 +58,11 @@ module GoldyLox
 
     # region _StatementVisitor
 
+    def visit_class(stmt)
+      @environment.define stmt.name.lexeme, nil
+      @environment.assign stmt.name, LoxClass.new(stmt.name.lexeme)
+    end
+
     def visit_block(stmt)
       execute_block stmt, Environment.new(@environment)
     end

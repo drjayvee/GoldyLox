@@ -7,6 +7,12 @@ module GoldyLox
       expr.accept(self)
     end
 
+    def visit_class(stmt)
+      str = +"class #{stmt.name.lexeme} { "
+      stmt.methods.each { str << it.accept(self) }
+      str << " }"
+    end
+
     def visit_block(stmt)
       str = +"{ "
       stmt.statements.each { str << print(it) }
