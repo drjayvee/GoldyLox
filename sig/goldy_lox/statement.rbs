@@ -10,6 +10,13 @@ module GoldyLox
       def initialize: (Array[Statement] statements) -> void
     end
 
+    class Class < Statement
+      attr_reader name: Token
+      attr_reader methods: Array[Function]
+
+      def initialize: (Token name, Array[Function] methods) -> void
+    end
+
     class Expression < Statement
       attr_reader expression: GoldyLox::Expression
 

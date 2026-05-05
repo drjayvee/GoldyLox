@@ -4,17 +4,35 @@ module GoldyLox
   class Parser
     module Grammar
       # Rule
-      #  declaration -> functionDeclaration
+      #  declaration -> classDeclaration
+      #              | functionDeclaration
       #              | variableDeclaration
       #              | statement ;
       def declaration
-        if match? :fun
+        if match? :class
+          class_declaration
+        elsif match? :fun
           function_declaration :function
         elsif match? :var
           var_declaration
         else
           statement
         end
+      end
+
+      # Rule
+      #  classDeclaration -> "class" IDENTIFIER "{" function* "}" ;
+      def class_declaration
+        name = consume :identifier, "Expect class name."
+
+        consume :left_brace, "Expect '{' after class name."
+
+        methods = []
+        methods << function_declaration(:method) until check?(:right_brace) || end?
+
+        consume :right_brace, "Expect '}' after methods."
+
+        Statement::Class.new(name, methods)
       end
 
       # Rule

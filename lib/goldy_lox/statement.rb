@@ -24,6 +24,10 @@ module GoldyLox
       attrs :statements
     end
 
+    class Class < Statement
+      attrs :name, :methods
+    end
+
     class Expression < Statement
       attrs :expression
     end

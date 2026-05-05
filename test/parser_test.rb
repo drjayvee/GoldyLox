@@ -395,6 +395,77 @@ class ParserTest < Minitest::Test
     end
   end
 
+  def test_class_statement_without_methods
+    tokens = [
+      [:class, 1, "class"]
+    ]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Expect class name.") { parser(tokens).parse }
+
+    tokens << [:identifier, 1, "klass"]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Expect { after class name.") { parser(tokens).parse }
+
+    tokens << [:left_brace, 1, "{"]
+
+    assert_raises(GoldyLox::Parser::ParseError, "Expect } after methods.") { parser(tokens).parse }
+
+    tokens << [:right_brace, 1, "}"]
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Class, statements.first
+    assert_equal "klass", statements.first.name.lexeme
+    assert_empty statements.first.methods
+  end
+
+  def test_class_statement_with_methods
+    tokens = [
+      [:class, 1, "class"],
+      [:identifier, 1, "klass"],
+      [:left_brace, 1, "{"],
+
+      [:identifier, 2, "foo"],
+      [:left_paren, 2, "("],
+      [:right_paren, 2, ")"],
+      [:left_brace, 2, "{"],
+      [:return, 3, "return"],
+      [:true, 3, "true"],
+      [:semicolon, 3, ";"],
+      [:right_brace, 4, "}"],
+
+      [:identifier, 5, "bar"],
+      [:left_paren, 5, "("],
+      [:identifier, 5, "baz"],
+      [:right_paren, 5, ")"],
+      [:left_brace, 5, "{"],
+      [:return, 6, "return"],
+      [:identifier, 6, "baz"],
+      [:semicolon, 6, ";"],
+      [:right_brace, 7, "}"],
+
+      [:right_brace, 8, "}"]
+    ]
+
+    statements = parser(tokens).parse
+
+    assert_equal 1, statements.size
+    assert_kind_of GoldyLox::Statement::Class, (klass = statements.first)
+    assert_equal "klass", klass.name.lexeme
+
+    assert_equal 2, (methods = klass.methods).length
+
+    assert_equal "foo", methods.first.name.lexeme
+    assert_empty methods.first.parameters
+
+    assert_equal "bar", methods.last.name.lexeme
+    assert_equal ["baz"], methods.last.parameters.map(&:lexeme)
+    assert_equal 1, (bs = methods.last.body.statements).length
+    assert_kind_of GoldyLox::Statement::Return, bs.first
+    assert_kind_of GoldyLox::Expression::Variable, bs.first.expression
+  end
+
   def test_fun_statement
     # print_sum(foo, bar) { print foo + bar; }
     tokens = [
