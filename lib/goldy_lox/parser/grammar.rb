@@ -9,7 +9,7 @@ module GoldyLox
       #              | statement ;
       def declaration
         if match? :fun
-          function :function
+          function_declaration :function
         elsif match? :var
           var_declaration
         else
@@ -24,7 +24,7 @@ module GoldyLox
       # function -> IDENTIFIER "(" parameters? ")" ;
       #
       # parameters -> IDENTIFIER ( "," IDENTIFIER )* ;
-      def function(kind)
+      def function_declaration(kind)
         name = consume :identifier, "Expect #{kind} name."
 
         consume :left_paren, "Expect '(' after #{kind} name."
