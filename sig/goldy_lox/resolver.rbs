@@ -12,7 +12,7 @@ module GoldyLox
 
     @interpreter: Interpreter
     @scopes: Array[Hash[String, bool]]
-    @current_function: :none | :function
+    @current_function: :none | :function | :method
 
     def initialize: (_Resolvable) -> void
 
@@ -29,6 +29,6 @@ module GoldyLox
     def resolve: (Expression | Statement) -> void
 
     def resolve_local: (Expression expr, Token name) -> void
-    def resolve_function: (Statement::Function) -> void
+    def resolve_function: (Statement::Function, :function | :method type) -> void
   end
 end

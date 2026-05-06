@@ -412,4 +412,17 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Mr. Klaas\nMr. Klaas", @out.join.chomp
   end
+
+  def test_method_call
+    interpret <<~LOX
+      class Bacon {
+        eat() {
+          print "Crunch crunch crunch!";
+        }
+      }
+      Bacon().eat();
+    LOX
+
+    assert_equal "Crunch crunch crunch!", @out.join.chomp
+  end
 end

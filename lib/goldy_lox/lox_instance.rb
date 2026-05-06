@@ -10,6 +10,10 @@ module GoldyLox
     def get(name)
       property = name.lexeme
 
+      if (method = @klass.find_method(property))
+        return method
+      end
+
       raise "Invalid property '#{property}' for get" unless @fields.key? property
 
       @fields[property]

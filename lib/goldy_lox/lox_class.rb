@@ -4,8 +4,9 @@ module GoldyLox
   class LoxClass
     attr_reader :name
 
-    def initialize(name)
+    def initialize(name, methods)
       @name = name
+      @methods = methods
     end
 
     def arity
@@ -14,6 +15,10 @@ module GoldyLox
 
     def call(_interpreter, _arguments)
       LoxInstance.new self
+    end
+
+    def find_method(name)
+      @methods[name]
     end
 
     def to_s

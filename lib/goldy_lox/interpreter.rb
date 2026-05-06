@@ -62,7 +62,15 @@ module GoldyLox
 
     def visit_class(stmt)
       @environment.define stmt.name.lexeme, nil
-      @environment.assign stmt.name, LoxClass.new(stmt.name.lexeme)
+
+      methods = {}
+      stmt.methods.each do |method|
+        methods[method.name.lexeme] = LoxFunction.new(method, @environment)
+      end
+
+      klass = LoxClass.new(stmt.name.lexeme, methods)
+
+      @environment.assign stmt.name, klass
     end
 
     def visit_block(stmt)

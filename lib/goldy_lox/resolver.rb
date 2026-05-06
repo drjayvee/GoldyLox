@@ -20,6 +20,8 @@ module GoldyLox
     def visit_class(stmt)
       declare stmt.name
       define stmt.name
+
+      stmt.methods.each { resolve_function it, :method }
     end
 
     def visit_block(stmt)
@@ -36,15 +38,7 @@ module GoldyLox
       declare stmt.name
       define stmt.name
 
-      current_function = @current_function
-      @current_function = :function
-
-      begin_scope
-      stmt.parameters.each { declare it; define it } # rubocop:disable Style/Semicolon
-      resolve stmt.body # visit_block will create a new scope
-      end_scope
-
-      @current_function = current_function
+      resolve_function(stmt, :function)
     end
 
     def visit_if(stmt)
@@ -58,7 +52,7 @@ module GoldyLox
     end
 
     def visit_return(stmt)
-      raise InvalidReturnError if @current_function != :function
+      raise InvalidReturnError unless %i[function method].include? @current_function
 
       resolve stmt.expression if stmt.expression
     end
@@ -160,6 +154,18 @@ module GoldyLox
           break # RuboCop doesn't like return, but that's the intent here
         end
       end
+    end
+
+    def resolve_function(stmt, type)
+      current_function = @current_function
+      @current_function = type
+
+      begin_scope
+      stmt.parameters.each { declare it; define it } # rubocop:disable Style/Semicolon
+      resolve stmt.body # visit_block will create a new scope
+      end_scope
+
+      @current_function = current_function
     end
   end
 end

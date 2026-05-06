@@ -4,6 +4,10 @@ module GoldyLox
 
     attr_reader name: String
 
-    def initialize: (String name) -> void
+    @methods: Hash[String, LoxFunction]
+
+    def initialize: (String name, Hash[String, LoxFunction] methods) -> void
+
+    def find_method: (String) -> LoxFunction?
   end
 end
