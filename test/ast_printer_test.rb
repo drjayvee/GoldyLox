@@ -78,6 +78,25 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(get (variable foo).bar)", @printer.print(get)
   end
 
+  def test_set_expression
+    # foo().bar = true
+    set = GoldyLox::Expression::Set.new(
+      GoldyLox::Expression::Call.new(
+        GoldyLox::Expression::Variable.new(
+          GoldyLox::Token.new(:identifier, 1, "foo")
+        ),
+        GoldyLox::Token.new(:left_paren, 1, "("),
+        []
+      ),
+      GoldyLox::Token.new(:identifier, 1, "bar"),
+      GoldyLox::Expression::Literal.new(
+        true
+      )
+    )
+
+    assert_equal "(set (call variable foo).bar = true)", @printer.print(set)
+  end
+
   def test_grouping_expression
     grouping = GoldyLox::Expression::Grouping.new(
       GoldyLox::Expression::Literal.new(123)

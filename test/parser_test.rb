@@ -305,6 +305,30 @@ class ParserTest < Minitest::Test
     assert_equal "scramble", expr.name.lexeme
   end
 
+  def test_get_with_property_name
+    # foo().bar = true
+    expr = parse_expression [
+      [:identifier, 1, "foo"],
+      [:left_paren, 1, "("],
+      [:right_paren, 1, ")"],
+      [:dot, 1, "."],
+      [:identifier, 1, "bar"],
+      [:equal, 1, "="],
+      [:true, 1, "true"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Set, expr
+    assert_kind_of GoldyLox::Expression::Call, expr.object
+    assert_equal "bar", expr.name.lexeme
+    assert_kind_of GoldyLox::Expression::Literal, expr.value
+    assert_equal true, expr.value.value # rubocop:disable Minitest/AssertTruthy
+
+    callee = expr.object.callee
+
+    assert_kind_of GoldyLox::Expression::Variable, callee
+    assert_equal "foo", callee.name.lexeme
+  end
+
   def test_grouping_precedes_factor
     # (1 + 2) * 3
     expr = parse_expression [

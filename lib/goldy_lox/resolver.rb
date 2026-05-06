@@ -108,6 +108,11 @@ module GoldyLox
       resolve expr.right
     end
 
+    def visit_set(expr)
+      resolve expr.object
+      resolve expr.value
+    end
+
     def visit_unary(expr)
       resolve expr.right
     end

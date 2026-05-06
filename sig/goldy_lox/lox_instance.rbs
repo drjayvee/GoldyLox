@@ -6,5 +6,6 @@ module GoldyLox
     def initialize: (LoxClass) -> void
 
     def get: (Token name) -> untyped
+    def set: (Token name, untyped value) -> untyped
   end
 end

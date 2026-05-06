@@ -89,6 +89,10 @@ module GoldyLox
       parenthesize "group", expr.expression
     end
 
+    def visit_set(expr)
+      "(set #{expr.object.accept(self)}.#{expr.name.lexeme} = #{expr.value.accept(self)})"
+    end
+
     def visit_unary(expr)
       parenthesize expr.operator.lexeme, expr.right
     end

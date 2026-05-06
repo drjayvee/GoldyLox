@@ -381,4 +381,35 @@ class InterpreterTest < Minitest::Test
       LOX
     end
   end
+
+  def test_invalid_set_expression
+    assert_raises RuntimeError, "Only instance have fields" do
+      interpret '"yep".prop = true'
+    end
+  end
+
+  def test_set_expression
+    interpret <<~LOX
+      class Klass {}
+      var klaas = Klass();
+      klaas.name = "Mr. Klaas";
+      print klaas.name;
+    LOX
+
+    assert_equal "Mr. Klaas", @out.join.chomp
+  end
+
+  def test_set_expression_with_callee
+    interpret <<~LOX
+      class Klass {}
+      var klaas = Klass();
+      fun getKlaas() {
+        return klaas;
+      }
+      print getKlaas().name = "Mr. Klaas";
+      print klaas.name = "Mr. Klaas";
+    LOX
+
+    assert_equal "Mr. Klaas\nMr. Klaas", @out.join.chomp
+  end
 end

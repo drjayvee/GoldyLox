@@ -54,6 +54,14 @@ module GoldyLox
       def initialize: (Expression left, Token operator, Expression right) -> void
     end
 
+    class Set < Expression
+      attr_reader object: Expression
+      attr_reader name: Token
+      attr_reader value: Expression
+
+      def initialize: (Expression object, Token name, Expression value) -> void
+    end
+
     class Unary < Expression
       attr_reader operator: Token
       attr_reader right: Expression

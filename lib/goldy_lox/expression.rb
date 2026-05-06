@@ -59,6 +59,10 @@ module GoldyLox
       attrs :left, :operator, :right
     end
 
+    class Set < Expression
+      attrs :object, :name, :value
+    end
+
     class Unary < Expression
       attrs :operator, :right
     end

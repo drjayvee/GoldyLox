@@ -15,6 +15,10 @@ module GoldyLox
       @fields[property]
     end
 
+    def set(name, value)
+      @fields[name.lexeme] = value
+    end
+
     def to_s
       "#{@klass} instance"
     end

@@ -179,7 +179,7 @@ module GoldyLox
     def visit_get(expr)
       object = expr.object.accept self
 
-      raise InvalidGetError, "Only instance have properties" unless object.is_a?(LoxInstance)
+      raise InvalidGetError, "Only instance have properties" unless object.is_a? LoxInstance
 
       object.get expr.name
     end
@@ -202,6 +202,17 @@ module GoldyLox
 
     def visit_literal(expr)
       expr.value
+    end
+
+    def visit_set(expr)
+      object = evaluate expr.object
+
+      raise "Only instances have fields" unless object.is_a? LoxInstance
+
+      value = evaluate expr.value
+      object.set expr.name, value
+
+      value
     end
 
     def visit_unary(expr)

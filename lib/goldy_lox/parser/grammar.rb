@@ -208,7 +208,7 @@ module GoldyLox
       end
 
       # Rule
-      #  assignment -> IDENTIFIER "=" assignment
+      #  assignment -> ( call "." )? IDENTIFIER "=" assignment
       #             | logic_or ;
       def assignment
         expr = logical_or
@@ -217,9 +217,13 @@ module GoldyLox
           equals = previous
           value = assignment # assignment is right-associative
 
-          error(equals, "Invalid assignment target") unless expr.is_a? Expression::Variable
+          if expr.is_a? Expression::Variable
+            return Expression::Assignment.new(expr.name, value)
+          elsif expr.is_a? Expression::Get
+            return Expression::Set.new expr.object, expr.name, value
+          end
 
-          return Expression::Assignment.new(expr.name, value)
+          error(equals, "Invalid assignment target") unless expr.is_a? Expression::Variable
         end
 
         expr
