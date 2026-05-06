@@ -322,16 +322,21 @@ module GoldyLox
       end
 
       # Rule
-      #  call -> primary ( "(" arguments? ")" )* ;
+      #  call -> primary ( "(" arguments? ")" | "." IDENTIFIER )* ;
       #
       #  arguments -> expression ( "," expression )* ;
       def call
         expr = primary
 
         loop do
-          break unless match? :left_paren
-
-          expr = finish_call expr
+          if match? :left_paren
+            expr = finish_call expr
+          elsif match? :dot
+            name = consume(:identifier, "Expect property name after '.'.")
+            expr = Expression::Get.new expr, name
+          else
+            break
+          end
         end
 
         expr

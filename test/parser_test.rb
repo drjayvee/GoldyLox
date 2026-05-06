@@ -255,6 +255,56 @@ class ParserTest < Minitest::Test
     end
   end
 
+  def test_get_without_property_name
+    assert_raises GoldyLox::Parser::ParseError, "Expect property name after '.'." do
+      parse_expression [
+        [:identifier, 1, "egg"],
+        [:dot, 1, "."]
+      ]
+    end
+  end
+
+  def test_get_call
+    # egg.scramble(3).with(cheddar)
+    expr = parse_expression [
+      [:identifier, 1, "egg"],
+      [:dot, 1, "."],
+      [:identifier, 1, "scramble"],
+      [:left_paren, 1, "("],
+      [:number, 1, "3", 3],
+      [:right_paren, 1, ")"],
+      [:dot, 1, "."],
+      [:identifier, 1, "with"],
+      [:left_paren, 1, "("],
+      [:identifier, 1, "cheddar"],
+      [:right_paren, 1, ")"]
+    ]
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+
+    assert_kind_of GoldyLox::Expression::Get, expr.callee
+    assert_equal(["cheddar"], expr.arguments.map { it.name.lexeme })
+
+    expr = expr.callee # egg.scramble(3).with
+
+    assert_kind_of GoldyLox::Expression::Get, expr
+    assert_kind_of GoldyLox::Expression::Call, expr.object
+    assert_equal("with", expr.name.lexeme)
+
+    expr = expr.object # egg.scramble(3)
+
+    assert_kind_of GoldyLox::Expression::Call, expr
+    assert_kind_of GoldyLox::Expression::Get, expr.callee
+    assert_equal [3], expr.arguments.map(&:value)
+
+    expr = expr.callee # egg.scramble
+
+    assert_kind_of GoldyLox::Expression::Get, expr
+    assert_kind_of GoldyLox::Expression::Variable, expr.object
+    assert_equal "egg", expr.object.name.lexeme
+    assert_equal "scramble", expr.name.lexeme
+  end
+
   def test_grouping_precedes_factor
     # (1 + 2) * 3
     expr = parse_expression [

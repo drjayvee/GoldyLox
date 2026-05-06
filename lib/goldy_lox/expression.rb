@@ -43,6 +43,10 @@ module GoldyLox
       attrs :callee, :paren, :arguments
     end
 
+    class Get < Expression
+      attrs :object, :name
+    end
+
     class Grouping < Expression
       attrs :expression
     end
