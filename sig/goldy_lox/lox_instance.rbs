@@ -1,0 +1,7 @@
+module GoldyLox
+  class LoxInstance
+    @klass: LoxClass
+
+    def initialize: (LoxClass) -> void
+  end
+end

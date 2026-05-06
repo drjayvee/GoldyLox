@@ -357,12 +357,13 @@ class InterpreterTest < Minitest::Test
     assert_equal "global\nglobal", @out.join.chomp
   end
 
-  def test_class_declaration
+  def test_class_declaration_and_simple_instantiation
     interpret <<~LOX
       class Klass {}
       print Klass;
+      print Klass();
     LOX
 
-    assert_equal "Klass", @out.join.chomp
+    assert_equal "Klass\nKlass instance", @out.join.chomp
   end
 end

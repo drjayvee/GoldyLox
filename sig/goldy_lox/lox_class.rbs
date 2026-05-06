@@ -1,5 +1,7 @@
 module GoldyLox
   class LoxClass
+    include _Callable
+
     attr_reader name: String
 
     def initialize: (String name) -> void
