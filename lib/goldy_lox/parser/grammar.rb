@@ -374,6 +374,8 @@ module GoldyLox
         return Expression::Literal.new(false) if match? :false
         return Expression::Literal.new(nil) if match? :nil
 
+        return Expression::This.new previous if match? :this
+
         return Expression::Variable.new previous if match? :identifier
 
         if match? :left_paren

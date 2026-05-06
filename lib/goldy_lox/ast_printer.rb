@@ -93,6 +93,10 @@ module GoldyLox
       "(set #{expr.object.accept(self)}.#{expr.name.lexeme} = #{expr.value.accept(self)})"
     end
 
+    def visit_this(_)
+      "this"
+    end
+
     def visit_unary(expr)
       parenthesize expr.operator.lexeme, expr.right
     end

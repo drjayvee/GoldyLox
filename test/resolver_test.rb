@@ -134,4 +134,19 @@ class ResolverTest < Minitest::Test
       LOX
     end
   end
+
+  def test_this_outside_class_method
+    assert_raises GoldyLox::Resolver::InvalidThisError, "Can't use 'this' outside of a class." do
+      resolve "print this;"
+    end
+
+    assert_raises GoldyLox::Resolver::InvalidThisError, "Can't use 'this' outside of a class." do
+      resolve <<~LOX
+        fun func() {
+          print this;
+        }
+        func();
+      LOX
+    end
+  end
 end

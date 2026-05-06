@@ -11,7 +11,7 @@ module GoldyLox
       property = name.lexeme
 
       if (method = @klass.find_method(property))
-        return method
+        return method.bind self
       end
 
       raise "Invalid property '#{property}' for get" unless @fields.key? property

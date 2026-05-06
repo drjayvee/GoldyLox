@@ -9,6 +9,8 @@ module GoldyLox
     @block: Proc
 
     def initialize: (Statement::Function declaration, Environment closure) -> void
+
+    def bind: (LoxInstance) -> instance
   end
 
   class NativeFunction

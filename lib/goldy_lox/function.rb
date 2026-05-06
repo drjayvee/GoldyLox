@@ -11,6 +11,13 @@ module GoldyLox
       @declaration.parameters.length
     end
 
+    def bind(instance)
+      env = Environment.new @closure
+      env.define "this", instance
+
+      LoxFunction.new(@declaration, env)
+    end
+
     def call(interpreter, arguments)
       env = Environment.new @closure
       @declaration.parameters.each_with_index do |parameter, i|

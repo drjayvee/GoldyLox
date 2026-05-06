@@ -425,4 +425,38 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Crunch crunch crunch!", @out.join.chomp
   end
+
+  def test_this
+    interpret <<~LOX
+      class Cake {
+        taste() {
+          var adjective = "delicious";
+          print "The " + this.flavor + " cake is " + adjective + "!";
+        }
+      }
+
+      var cake = Cake();
+      cake.flavor = "German chocolate";
+      cake.taste(); // Prints "The German chocolate cake is delicious!".
+    LOX
+
+    assert_equal "The German chocolate cake is delicious!", @out.join.chomp
+
+    interpret <<~LOX
+      class Thing {
+        getCallback() {
+          fun localFunction() {
+            print this;
+          }
+
+          return localFunction;
+        }
+      }
+
+      var callback = Thing().getCallback();
+      callback();
+    LOX
+
+    assert_equal "Thing instance", @out.join.chomp
+  end
 end

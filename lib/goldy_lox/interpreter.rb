@@ -223,6 +223,10 @@ module GoldyLox
       value
     end
 
+    def visit_this(expr)
+      lookup_variable expr.keyword, expr
+    end
+
     def visit_unary(expr)
       value = expr.right.accept(self)
 

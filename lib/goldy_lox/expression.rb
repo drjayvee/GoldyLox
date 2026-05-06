@@ -63,6 +63,10 @@ module GoldyLox
       attrs :object, :name, :value
     end
 
+    class This < Expression
+      attrs :keyword
+    end
+
     class Unary < Expression
       attrs :operator, :right
     end

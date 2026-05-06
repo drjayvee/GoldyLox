@@ -3,12 +3,14 @@
 module GoldyLox
   class Resolver
     class InvalidReturnError < RuntimeError; end
+    class InvalidThisError < RuntimeError; end
     class ResolutionError < RuntimeError; end
 
     def initialize(interpreter)
       @interpreter = interpreter
       @scopes = []
       @current_function = :none
+      @current_class = :none
     end
 
     def resolve_all(stmts)
@@ -18,10 +20,20 @@ module GoldyLox
     # region _StatementVisitor
 
     def visit_class(stmt)
+      enclosing_class = @current_class
+      @current_class = :class
+
       declare stmt.name
       define stmt.name
 
+      begin_scope
+      @scopes.last["this"] = true
+
       stmt.methods.each { resolve_function it, :method }
+
+      end_scope
+
+      @current_class = enclosing_class
     end
 
     def visit_block(stmt)
@@ -105,6 +117,12 @@ module GoldyLox
     def visit_set(expr)
       resolve expr.object
       resolve expr.value
+    end
+
+    def visit_this(expr)
+      raise InvalidThisError, "Can't use 'this' outside of a class." if @current_class == :none
+
+      resolve_local expr, expr.keyword
     end
 
     def visit_unary(expr)

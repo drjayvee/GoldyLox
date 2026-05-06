@@ -4,15 +4,13 @@ module GoldyLox
       def resolve: (Expression, Integer) -> void
     end
 
-    class ResolutionError < RuntimeError
-    end
-
     include _ExpressionVisitor[void]
     include _StatementVisitor[void]
 
     @interpreter: Interpreter
     @scopes: Array[Hash[String, bool]]
     @current_function: :none | :function | :method
+    @current_class: :none | :class
 
     def initialize: (_Resolvable) -> void
 
