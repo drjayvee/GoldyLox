@@ -93,6 +93,10 @@ module GoldyLox
       expr.arguments.each { resolve it }
     end
 
+    def visit_get(expr)
+      resolve expr.object
+    end
+
     def visit_grouping(expr)
       resolve expr.expression
     end

@@ -81,6 +81,10 @@ module GoldyLox
       parenthesize expr.operator.type, expr.left, expr.right
     end
 
+    def visit_get(expr)
+      "(get (#{expr.object.accept(self)}).#{expr.name.lexeme})"
+    end
+
     def visit_grouping(expr)
       parenthesize "group", expr.expression
     end

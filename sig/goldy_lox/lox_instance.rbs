@@ -1,7 +1,10 @@
 module GoldyLox
   class LoxInstance
+    @fields: Hash[String, untyped]
     @klass: LoxClass
 
     def initialize: (LoxClass) -> void
+
+    def get: (Token name) -> untyped
   end
 end

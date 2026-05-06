@@ -3,6 +3,7 @@ module GoldyLox
     def visit_assignment: (Expression::Assignment) -> R
     def visit_binary: (Expression::Binary) -> R
     def visit_call: (Expression::Call) -> R
+    def visit_get: (Expression::Get) -> R
     def visit_grouping: (Expression::Grouping) -> R
     def visit_literal: (Expression::Literal) -> R
     def visit_logical: (Expression::Logical) -> R

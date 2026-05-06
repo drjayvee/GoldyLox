@@ -4,6 +4,15 @@ module GoldyLox
   class LoxInstance
     def initialize(klass)
       @klass = klass
+      @fields = {}
+    end
+
+    def get(name)
+      property = name.lexeme
+
+      raise "Invalid property '#{property}' for get" unless @fields.key? property
+
+      @fields[property]
     end
 
     def to_s

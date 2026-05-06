@@ -66,6 +66,18 @@ class AstPrinterTest < Minitest::Test
     assert_equal "(or 1 (and 2 3))", @printer.print(logical)
   end
 
+  def test_get_expression
+    # foo.bar
+    get = GoldyLox::Expression::Get.new(
+      GoldyLox::Expression::Variable.new(
+        GoldyLox::Token.new(:identifier, 1, "foo")
+      ),
+      GoldyLox::Token.new(:identifier, 1, "bar")
+    )
+
+    assert_equal "(get (variable foo).bar)", @printer.print(get)
+  end
+
   def test_grouping_expression
     grouping = GoldyLox::Expression::Grouping.new(
       GoldyLox::Expression::Literal.new(123)

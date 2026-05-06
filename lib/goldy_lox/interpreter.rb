@@ -2,6 +2,8 @@
 
 module GoldyLox
   class Interpreter
+    class InvalidGetError < RuntimeError; end
+
     class InvalidOperandError < RuntimeError
       attr_reader :operator, :value
 
@@ -172,6 +174,14 @@ module GoldyLox
       end
 
       callee.call(self, arguments)
+    end
+
+    def visit_get(expr)
+      object = expr.object.accept self
+
+      raise InvalidGetError, "Only instance have properties" unless object.is_a?(LoxInstance)
+
+      object.get expr.name
     end
 
     def visit_grouping(expr)

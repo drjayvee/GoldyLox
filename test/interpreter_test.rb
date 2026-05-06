@@ -366,4 +366,19 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Klass\nKlass instance", @out.join.chomp
   end
+
+  def test_invalid_get_expression
+    assert_raises GoldyLox::Interpreter::InvalidGetError, "Only instances have properties" do
+      interpret <<~LOX
+        true.bar;
+      LOX
+    end
+
+    assert_raises GoldyLox::Interpreter::InvalidGetError, "Only instances have properties" do
+      interpret <<~LOX
+        var foo = "foo";
+        foo.bar;
+      LOX
+    end
+  end
 end
