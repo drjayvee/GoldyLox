@@ -459,4 +459,17 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Thing instance", @out.join.chomp
   end
+
+  def test_constructor
+    interpret <<~LOX
+      class Cake {
+        init(type) {
+          this.type = type;
+        }
+      }
+      print Cake("Red Velvet").type;
+    LOX
+
+    assert_equal "Red Velvet", @out.join.chomp
+  end
 end

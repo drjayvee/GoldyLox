@@ -9,5 +9,6 @@ module GoldyLox
     def initialize: (String name, Hash[String, LoxFunction] methods) -> void
 
     def find_method: (String) -> LoxFunction?
+    def init: () -> LoxFunction?
   end
 end
