@@ -65,7 +65,8 @@ module GoldyLox
 
       methods = {}
       stmt.methods.each do |method|
-        methods[method.name.lexeme] = LoxFunction.new(method, @environment)
+        name = method.name.lexeme
+        methods[name] = LoxFunction.new(method, @environment, name == "init")
       end
 
       klass = LoxClass.new(stmt.name.lexeme, methods)
@@ -84,7 +85,7 @@ module GoldyLox
     def visit_function(stmt)
       @environment.define(
         stmt.name.lexeme,
-        LoxFunction.new(stmt, @environment)
+        LoxFunction.new(stmt, @environment, false)
       )
     end
 

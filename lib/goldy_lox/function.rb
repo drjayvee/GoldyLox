@@ -2,9 +2,10 @@
 
 module GoldyLox
   class LoxFunction
-    def initialize(declaration, closure)
+    def initialize(declaration, closure, is_initializer)
       @declaration = declaration
       @closure = closure
+      @is_initializer = is_initializer
     end
 
     def arity
@@ -15,7 +16,7 @@ module GoldyLox
       env = Environment.new @closure
       env.define "this", instance
 
-      LoxFunction.new(@declaration, env)
+      LoxFunction.new(@declaration, env, @is_initializer)
     end
 
     def call(interpreter, arguments)
@@ -25,8 +26,13 @@ module GoldyLox
       end
 
       interpreter.execute_block @declaration.body, env
+
+      return @closure.get_at(0, "this") if @is_initializer
+
       nil
     rescue Interpreter::Return => e
+      return @closure.get_at(0, "this") if @is_initializer
+
       e.value
     end
   end

@@ -10,13 +10,13 @@ module GoldyLox
     end
 
     def arity
-      find_method("init")&.arity || 0
+      initializer&.arity || 0
     end
 
     def call(interpreter, arguments)
       instance = LoxInstance.new self
 
-      init&.bind(instance)&.call(interpreter, arguments)
+      initializer&.bind(instance)&.call(interpreter, arguments)
 
       instance
     end
@@ -25,9 +25,7 @@ module GoldyLox
       @methods[name]
     end
 
-    def init
-      find_method "init"
-    end
+    def initializer = find_method "init"
 
     def to_s
       name

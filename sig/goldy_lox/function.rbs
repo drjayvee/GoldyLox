@@ -6,9 +6,9 @@ module GoldyLox
 
     @declaration: Statement::Function
     @closure: Environment
-    @block: Proc
+    @is_initializer: bool
 
-    def initialize: (Statement::Function declaration, Environment closure) -> void
+    def initialize: (Statement::Function declaration, Environment closure, bool is_initializer) -> void
 
     def bind: (LoxInstance) -> instance
   end

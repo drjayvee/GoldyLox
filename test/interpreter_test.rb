@@ -472,4 +472,24 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Red Velvet", @out.join.chomp
   end
+
+  def test_call_init_method
+    interpret <<~LOX
+      class Foo {
+        init() {}
+      }
+      print Foo().init();
+    LOX
+
+    assert_equal "Foo instance", @out.join.chomp
+  end
+
+  def test_call_init_function
+    interpret <<~LOX
+      fun init() { return "init here"; }
+      print init();
+    LOX
+
+    assert_equal "init here", @out.join.chomp
+  end
 end

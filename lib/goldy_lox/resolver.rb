@@ -29,7 +29,10 @@ module GoldyLox
       begin_scope
       @scopes.last["this"] = true
 
-      stmt.methods.each { resolve_function it, :method }
+      stmt.methods.each do |method|
+        type = method.name.lexeme == "init" ? :initializer : :method
+        resolve_function method, type
+      end
 
       end_scope
 
@@ -64,9 +67,17 @@ module GoldyLox
     end
 
     def visit_return(stmt)
-      raise InvalidReturnError unless %i[function method].include? @current_function
+      unless %i[function method initializer].include? @current_function
+        raise InvalidReturnError, "Can only return from functions and methods."
+      end
 
-      resolve stmt.expression if stmt.expression
+      return unless stmt.expression
+
+      if @current_function == :initializer # rubocop:ignore Style/IfUnlessModifier
+        raise InvalidReturnError, "Cannot return from initializer method."
+      end
+
+      resolve stmt.expression
     end
 
     def visit_var(stmt)

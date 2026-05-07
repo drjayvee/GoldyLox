@@ -149,4 +149,33 @@ class ResolverTest < Minitest::Test
       LOX
     end
   end
+
+  def test_return_from_initializer
+    assert_raises GoldyLox::Resolver::InvalidReturnError, "Cannot return from initializer method." do
+      resolve <<~LOX
+        class Foo {
+          init() { return "from init"; }
+        }
+      LOX
+    end
+
+    assert_raises GoldyLox::Resolver::InvalidReturnError, "Cannot return from initializer method." do
+      resolve <<~LOX
+        class Foo {
+          init() { return this; }
+        }
+      LOX
+    end
+
+    # bare return from initializer is allowed
+    resolve <<~LOX
+      class Foo {
+        init() { return; }
+      }
+    LOX
+
+    # return from init *function* is allowed
+    resolve "fun init() { return true; }"
+    resolve "fun init() { return; }"
+  end
 end
