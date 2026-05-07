@@ -61,6 +61,12 @@ module GoldyLox
     # region _StatementVisitor
 
     def visit_class(stmt)
+      super_class = nil
+      if stmt.super_class
+        super_class = evaluate stmt.super_class
+        raise "Superclass must be a class." unless super_class.is_a? LoxClass
+      end
+
       @environment.define stmt.name.lexeme, nil
 
       methods = {}
@@ -69,7 +75,7 @@ module GoldyLox
         methods[name] = LoxFunction.new(method, @environment, name == "init")
       end
 
-      klass = LoxClass.new(stmt.name.lexeme, methods)
+      klass = LoxClass.new(stmt.name.lexeme, super_class, methods)
 
       @environment.assign stmt.name, klass
     end

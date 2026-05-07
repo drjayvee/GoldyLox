@@ -12,9 +12,10 @@ module GoldyLox
 
     class Class < Statement
       attr_reader name: Token
+      attr_reader super_class: GoldyLox::Expression::Variable?
       attr_reader methods: Array[Function]
 
-      def initialize: (Token name, Array[Function] methods) -> void
+      def initialize: (Token name, GoldyLox::Expression::Variable? super_class, Array[Function] methods) -> void
     end
 
     class Expression < Statement

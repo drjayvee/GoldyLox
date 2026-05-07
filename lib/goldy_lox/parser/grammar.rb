@@ -21,9 +21,11 @@ module GoldyLox
       end
 
       # Rule
-      #  classDeclaration -> "class" IDENTIFIER "{" function* "}" ;
+      #  classDeclaration -> "class" IDENTIFIER ( "<" IDENTIFIER )? "{" function* "}" ;
       def class_declaration
         name = consume :identifier, "Expect class name."
+
+        super_class = (Expression::Variable.new consume(:identifier, "Expect superclass name.") if match?(:less))
 
         consume :left_brace, "Expect '{' after class name."
 
@@ -32,7 +34,7 @@ module GoldyLox
 
         consume :right_brace, "Expect '}' after methods."
 
-        Statement::Class.new(name, methods)
+        Statement::Class.new(name, super_class, methods)
       end
 
       # Rule

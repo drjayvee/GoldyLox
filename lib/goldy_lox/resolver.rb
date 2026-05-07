@@ -26,6 +26,12 @@ module GoldyLox
       declare stmt.name
       define stmt.name
 
+      if stmt.super_class
+        raise ResolutionError, "A class can't inherit from itself" if stmt.name.lexeme == stmt.super_class.name.lexeme
+
+        resolve stmt.super_class
+      end
+
       begin_scope
       @scopes.last["this"] = true
 

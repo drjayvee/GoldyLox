@@ -4,8 +4,9 @@ module GoldyLox
   class LoxClass
     attr_reader :name
 
-    def initialize(name, methods)
+    def initialize(name, super_class, methods)
       @name = name
+      @super_class = super_class
       @methods = methods
     end
 

@@ -492,4 +492,22 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "init here", @out.join.chomp
   end
+
+  def test_inheritance_declaration
+    assert_raises RuntimeError, "Superclass must be a class." do
+      interpret <<~LOX
+        var NotAClass = "hehe";
+        class Sub < NotAClass {}
+        print Sub;
+      LOX
+    end
+
+    interpret <<~LOX
+      class Sup {}
+      class Sub < Sup {}
+      print Sub;
+    LOX
+
+    assert_equal "Sub", @out.join.chomp
+  end
 end

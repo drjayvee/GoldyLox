@@ -178,4 +178,10 @@ class ResolverTest < Minitest::Test
     resolve "fun init() { return true; }"
     resolve "fun init() { return; }"
   end
+
+  def test_class_extends_itself
+    assert_raises GoldyLox::Resolver::ResolutionError, "A class can't inherit from itself" do
+      resolve "class Self < Self {}"
+    end
+  end
 end

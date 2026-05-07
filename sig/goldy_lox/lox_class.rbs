@@ -3,10 +3,11 @@ module GoldyLox
     include _Callable
 
     attr_reader name: String
+    attr_reader super_class: instance?
 
     @methods: Hash[String, LoxFunction]
 
-    def initialize: (String name, Hash[String, LoxFunction] methods) -> void
+    def initialize: (String name, instance? super_class, Hash[String, LoxFunction] methods) -> void
 
     def find_method: (String) -> LoxFunction?
     def initializer: () -> LoxFunction?

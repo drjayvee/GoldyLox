@@ -25,7 +25,7 @@ module GoldyLox
     end
 
     class Class < Statement
-      attrs :name, :methods
+      attrs :name, :super_class, :methods
     end
 
     class Expression < Statement
