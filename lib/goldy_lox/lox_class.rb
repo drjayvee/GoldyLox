@@ -23,7 +23,7 @@ module GoldyLox
     end
 
     def find_method(name)
-      @methods[name]
+      @methods[name] || @super_class&.find_method(name)
     end
 
     def initializer = find_method "init"

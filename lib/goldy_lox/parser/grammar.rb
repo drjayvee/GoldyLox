@@ -368,13 +368,21 @@ module GoldyLox
       # Rule
       #  primary -> "true" | "false" | "nil"
       #          | NUMBER | STRING
+      #          | IDENTIFIER
       #          | "(" expression ")"
-      #          | IDENTIFIER ;
+      #          | "super" "." IDENTIFIER ;
       def primary
         return Expression::Literal.new(previous.literal) if match? :number, :string
         return Expression::Literal.new(true) if match? :true
         return Expression::Literal.new(false) if match? :false
         return Expression::Literal.new(nil) if match? :nil
+
+        if match? :super
+          keyword = previous
+          consume :dot, "Expect '.' after 'super'."
+          method_name = consume :identifier, "Expect superclass method name."
+          return Expression::Super.new keyword, method_name
+        end
 
         return Expression::This.new previous if match? :this
 

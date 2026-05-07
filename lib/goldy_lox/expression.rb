@@ -63,6 +63,10 @@ module GoldyLox
       attrs :object, :name, :value
     end
 
+    class Super < Expression
+      attrs :keyword, :method_name
+    end
+
     class This < Expression
       attrs :keyword
     end

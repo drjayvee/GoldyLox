@@ -6,7 +6,7 @@ module GoldyLox
       def initialize: (String message, Token name) -> void
     end
 
-    private attr_reader enclosing: instance
+    public attr_reader enclosing: instance
     private attr_reader values: Hash[String, untyped]
 
     @enclosing: instance?

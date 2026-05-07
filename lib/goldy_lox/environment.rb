@@ -2,7 +2,8 @@
 
 module GoldyLox
   class Environment
-    protected attr_reader :enclosing, :values
+    public attr_reader :enclosing
+    protected attr_reader :values
 
     class UndefinedVariableError < RuntimeError
       def initialize(message, name)

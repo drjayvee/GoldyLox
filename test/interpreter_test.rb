@@ -510,4 +510,86 @@ class InterpreterTest < Minitest::Test
 
     assert_equal "Sub", @out.join.chomp
   end
+
+  def test_call_inherited_method
+    interpret <<~LOX
+      class Sup {
+        greet() { print "hey from sup"; }
+      }
+      class Sub < Sup {}
+      Sub().greet();
+    LOX
+
+    assert_equal "hey from sup", @out.join.chomp
+  end
+
+  def test_call_overridden_method
+    interpret <<~LOX
+      class Sup {
+        greet() { print "hey from sup"; }
+      }
+      class Sub < Sup {
+        greet() { print "hey from sub"; }
+      }
+      Sub().greet();
+    LOX
+
+    assert_equal "hey from sub", @out.join.chomp
+  end
+
+  def test_call_super_method
+    interpret <<~LOX
+      class Sup {
+        greet() { print "hey from sup"; }
+      }
+      class Sub < Sup {
+        greet() {
+          super.greet();
+          print "hey from sub";
+        }
+      }
+      Sub().greet();
+    LOX
+
+    assert_equal "hey from sup\nhey from sub", @out.join.chomp
+
+    interpret <<~LOX
+      class A {
+        method() {
+          print "A method";
+        }
+      }
+
+      class B < A {
+        method() {
+          print "B method";
+        }
+
+        test() {
+          super.method();
+        }
+      }
+
+      class C < B {}
+
+      C().test();
+    LOX
+
+    assert_equal "A method", @out.join.chomp
+  end
+
+  def test_invalid_super_method
+    assert_raises RuntimeError, "Undefined property 'supa'." do
+      interpret <<~LOX
+        class Sup {
+        }
+        class Sub < Sup {
+          greet() {
+            super.supa();
+          }
+        }
+        Sub().greet();
+      LOX
+    end
+  end
 end

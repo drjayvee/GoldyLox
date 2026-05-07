@@ -29,7 +29,12 @@ module GoldyLox
       if stmt.super_class
         raise ResolutionError, "A class can't inherit from itself" if stmt.name.lexeme == stmt.super_class.name.lexeme
 
+        @current_class = :subclass
+
         resolve stmt.super_class
+
+        begin_scope
+        @scopes.last["super"] = true
       end
 
       begin_scope
@@ -41,6 +46,7 @@ module GoldyLox
       end
 
       end_scope
+      end_scope if stmt.super_class
 
       @current_class = enclosing_class
     end
@@ -134,6 +140,16 @@ module GoldyLox
     def visit_set(expr)
       resolve expr.object
       resolve expr.value
+    end
+
+    def visit_super(expr)
+      if @current_class == :none
+        raise ResolutionError, "Can't use 'super' outside of a class."
+      elsif @current_class != :subclass
+        raise ResolutionError, "Can't use 'super' in a class with no superclass."
+      end
+
+      resolve_local expr, expr.keyword
     end
 
     def visit_this(expr)

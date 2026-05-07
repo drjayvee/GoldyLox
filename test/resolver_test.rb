@@ -184,4 +184,19 @@ class ResolverTest < Minitest::Test
       resolve "class Self < Self {}"
     end
   end
+
+  def test_invalid_super_expressions
+    assert_raises RuntimeError, "Can't use 'super' outside of a class." do
+      resolve "super.notEvenInAClass();"
+    end
+
+    assert_raises RuntimeError, "Can't use 'super' in a class with no superclass." do
+      resolve <<~LOX
+        class Orphan {
+          mama() { super.name(); }
+        }
+        Orphan().mummy();
+      LOX
+    end
+  end
 end

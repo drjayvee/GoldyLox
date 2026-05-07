@@ -69,6 +69,11 @@ module GoldyLox
 
       @environment.define stmt.name.lexeme, nil
 
+      if super_class
+        @environment = Environment.new @environment
+        @environment.define "super", super_class
+      end
+
       methods = {}
       stmt.methods.each do |method|
         name = method.name.lexeme
@@ -76,6 +81,8 @@ module GoldyLox
       end
 
       klass = LoxClass.new(stmt.name.lexeme, super_class, methods)
+
+      @environment = @environment.enclosing if super_class
 
       @environment.assign stmt.name, klass
     end
@@ -228,6 +235,20 @@ module GoldyLox
       object.set expr.name, value
 
       value
+    end
+
+    def visit_super(expr)
+      distance = @locals[expr]
+      method_name = expr.method_name.lexeme
+
+      super_class = @environment.get_at distance,     "super"
+      object =      @environment.get_at distance - 1, "this"
+
+      method = super_class.find_method(method_name)
+
+      raise "Undefined property '#{method_name}." unless method
+
+      method.bind(object)
     end
 
     def visit_this(expr)
