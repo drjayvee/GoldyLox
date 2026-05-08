@@ -2,7 +2,7 @@
 
 module GoldyLox
   class Resolver
-    class InvalidReturnError < RuntimeError
+    class ResolutionErrorBase < RuntimeError
       attr_reader :token
 
       def initialize(message, token = nil)
@@ -11,23 +11,9 @@ module GoldyLox
       end
     end
 
-    class InvalidThisError < RuntimeError
-      attr_reader :token
-
-      def initialize(message, token = nil)
-        super(message)
-        @token = token
-      end
-    end
-
-    class ResolutionError < RuntimeError
-      attr_reader :token
-
-      def initialize(message, token = nil)
-        super(message)
-        @token = token
-      end
-    end
+    class InvalidReturnError < ResolutionErrorBase; end
+    class InvalidThisError < ResolutionErrorBase; end
+    class ResolutionError < ResolutionErrorBase; end
 
     def initialize(interpreter)
       @interpreter = interpreter
