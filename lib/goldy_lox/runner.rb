@@ -33,8 +33,13 @@ module GoldyLox
       statements.each { @err << "#{@printer.print(it)}\n" }
 
       # resolve variables
-      resolver = Resolver.new @interpreter
-      resolver.resolve_all statements
+      begin
+        resolver = Resolver.new @interpreter
+        resolver.resolve_all statements
+      rescue Resolver::InvalidReturnError, Resolver::InvalidThisError, Resolver::ResolutionError => e
+        log_error e.message, e.token.line
+        return
+      end
 
       # execute statements
       begin

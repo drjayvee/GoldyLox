@@ -2,9 +2,32 @@
 
 module GoldyLox
   class Resolver
-    class InvalidReturnError < RuntimeError; end
-    class InvalidThisError < RuntimeError; end
-    class ResolutionError < RuntimeError; end
+    class InvalidReturnError < RuntimeError
+      attr_reader :token
+
+      def initialize(message, token = nil)
+        super(message)
+        @token = token
+      end
+    end
+
+    class InvalidThisError < RuntimeError
+      attr_reader :token
+
+      def initialize(message, token = nil)
+        super(message)
+        @token = token
+      end
+    end
+
+    class ResolutionError < RuntimeError
+      attr_reader :token
+
+      def initialize(message, token = nil)
+        super(message)
+        @token = token
+      end
+    end
 
     def initialize(interpreter)
       @interpreter = interpreter
@@ -27,7 +50,9 @@ module GoldyLox
       define stmt.name
 
       if stmt.super_class
-        raise ResolutionError, "A class can't inherit from itself" if stmt.name.lexeme == stmt.super_class.name.lexeme
+        if stmt.name.lexeme == stmt.super_class.name.lexeme
+          raise ResolutionError.new("A class can't inherit from itself", stmt.super_class.name)
+        end
 
         @current_class = :subclass
 
@@ -80,13 +105,13 @@ module GoldyLox
 
     def visit_return(stmt)
       unless %i[function method initializer].include? @current_function
-        raise InvalidReturnError, "Can only return from functions and methods."
+        raise InvalidReturnError.new("Can only return from functions and methods.", stmt.keyword)
       end
 
       return unless stmt.expression
 
       if @current_function == :initializer # rubocop:ignore Style/IfUnlessModifier
-        raise InvalidReturnError, "Cannot return from initializer method."
+        raise InvalidReturnError.new("Cannot return from initializer method.", stmt.keyword)
       end
 
       resolve stmt.expression
@@ -144,16 +169,16 @@ module GoldyLox
 
     def visit_super(expr)
       if @current_class == :none
-        raise ResolutionError, "Can't use 'super' outside of a class."
+        raise ResolutionError.new("Can't use 'super' outside of a class.", expr.keyword)
       elsif @current_class != :subclass
-        raise ResolutionError, "Can't use 'super' in a class with no superclass."
+        raise ResolutionError.new("Can't use 'super' in a class with no superclass.", expr.keyword)
       end
 
       resolve_local expr, expr.keyword
     end
 
     def visit_this(expr)
-      raise InvalidThisError, "Can't use 'this' outside of a class." if @current_class == :none
+      raise InvalidThisError.new("Can't use 'this' outside of a class.", expr.keyword) if @current_class == :none
 
       resolve_local expr, expr.keyword
     end
@@ -164,7 +189,7 @@ module GoldyLox
 
     def visit_variable(expr)
       if !@scopes.empty? && @scopes.last[expr.name.lexeme] == false
-        raise ResolutionError, "Can't read local variable in its own initializer."
+        raise ResolutionError.new("Can't read local variable in its own initializer.", expr.name)
       end
 
       resolve_local expr, expr.name
