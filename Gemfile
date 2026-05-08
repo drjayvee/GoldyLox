@@ -2,10 +2,12 @@
 
 source "https://rubygems.org"
 
-gem "rbs"
+group :development, :test do
+  gem "rake"
+  gem "rbs"
+end
 
 group :development do
-  gem "rake"
   gem "rubocop"
   gem "rubocop-minitest", require: false
   gem "rubocop-rake", require: false
